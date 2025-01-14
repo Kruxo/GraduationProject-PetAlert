@@ -1,0 +1,29 @@
+.container2 {
+    border: solid black 10px;
+    text-align: center;
+    /* margin: 1%; */
+    /* padding: 10%; */
+
+}
+
+.map {
+    padding: 10px;
+    border: solid black 10px;
+    text-align: center;
+    background-color: hsl(40, 33%, 98%)
+}
+
+.reportlist {
+    padding: 10px;
+    border: solid black 10px;
+    text-align: center;
+    background-color: hsl(150, 15%, 86%);
+
+}
+
+.headerclass {
+    width: 100%;
+    background-color: aquamarine;
+    align-items: center;
+
+}

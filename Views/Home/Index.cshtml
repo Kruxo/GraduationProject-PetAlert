@@ -1,8 +1,21 @@
-﻿@{
+﻿<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+<body>
+    <header class="headerclass">
+        <h1 class="display-4">Help find lost pets</h1>
+        <p>Together we container </p>
+        <button class="btn btn-primary ">Knapp</button>
+    </header>
+
+    <div class="map">Map</div>
+
+    <div class="reportlist">
+        <div class="container text-center" style="border:solid black 1px;">Nummer 1</div>
+        <div class="container text-center" style="border:solid black 1px;">Nummer 2</div>
+    </div>
+</body>
