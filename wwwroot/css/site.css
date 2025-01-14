@@ -8,14 +8,14 @@
 
 .map {
     padding: 10px;
-    border: solid black 10px;
+    
     text-align: center;
     background-color: hsl(40, 33%, 98%)
 }
 
 .reportlist {
     padding: 10px;
-    border: solid black 10px;
+    
     text-align: center;
     background-color: hsl(150, 15%, 86%);
 
@@ -23,7 +23,20 @@
 
 .headerclass {
     width: 100%;
-    background-color: aquamarine;
-    align-items: center;
+    padding:40px 0px 40px 0px;
+    background-color: burlywood;
+    text-align: center;
 
+}
+
+.button{
+    border-radius: 30px;
+    background-color:hsl(28, 54%, 44%);
+    padding: 10px 20px;
+    box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.09);
+    
+   border:none;
+    
+   
+    
 }
