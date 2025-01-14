@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GraduationProject.Models;
 
@@ -7,11 +8,14 @@ public class Lost
     public int Id { get; set; }
     public string Name { get; set; } = "";
     public string Description { get; set; } = "";
-    public string Chip_Id { get; set; } = "";
+    public string ChipId { get; set; } = "";
     public string Image { get; set; } = "";
     public string Latitude { get; set; } = "";
     public string Longitude { get; set; } = "";
-    public string User_Id { get; set; } = "";
-    public Pet_Type? Pet_Type_Id { get; set; }
+    public string UserId { get; set; } = "";
+
+    [ForeignKey("PetType")]
+    public int? PetTypeId { get; set; } // Foreign key
+    public PetType? PetType { get; set; } // Navigation property
 
 }
