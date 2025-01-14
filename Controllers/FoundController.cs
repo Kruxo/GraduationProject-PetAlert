@@ -4,11 +4,11 @@ using GraduationProject.Models;
 
 namespace GraduationProject.Controllers;
 
-public class HomeController : Controller
+public class FoundController : Controller
 {
     private readonly ApplicationDbContext _context;
 
-    public HomeController(ApplicationDbContext context)
+    public FoundController(ApplicationDbContext context)
     {
         _context = context;
     }
@@ -17,10 +17,4 @@ public class HomeController : Controller
     {
         return View();
     }
-
-    public IActionResult Privacy()
-    {
-        return View();
-    }
-
 }
