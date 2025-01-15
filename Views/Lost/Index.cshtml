@@ -1,0 +1,46 @@
+@model LostIndexVm
+
+<h1 class="text-center my-4">Lost Pets</h1>
+
+@if (!Model.LostPets.Any())
+{
+    <div class="alert alert-info text-center">
+        No lost pets available.
+    </div>
+}
+else
+{
+    <div class="d-flex flex-wrap justify-content-center">
+        @foreach (var lostPet in Model.LostPets)
+        {
+            <div class="card m-3"
+                style="width: 20rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid rgba(194, 194, 194, 0.185); border-radius: 10px;">
+
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-2">@lostPet.Name</h5>
+                    <p class="card-text text-muted text-center">@lostPet.Description</p>
+                    <img src="@lostPet.Image" class="card-img-top rounded-top" alt="@lostPet.Image"
+                        style="height: 150px; width: auto; object-fit: contain; margin: auto; padding-top: 10px">
+                    <hr class="my-3">
+                    <ul class="list-unstyled mb-3">
+                        <li class="d-flex justify-content-between">
+                            <span><strong>Pet Type:</strong></span>
+                            <span>@(Model.PetTypes.FirstOrDefault(t => t.Id == lostPet.PetTypeId)?.Type)</span>
+                        </li>
+                    </ul>
+                    <ul class="list-unstyled mb-3">
+                        <li class="d-flex justify-content-between">
+                            <span><strong>Chip ID:</strong></span>
+                            <span>@lostPet.ChipId</span>
+                        </li>
+                    </ul>
+                    <div class="d-flex gap-2">
+                        <a asp-action="Edit" asp-route-id="@lostPet.Id" class="btn btn-warning flex-fill">Edit</a>
+                        <a href="@Url.Action("Delete", "Lost", new { id = lostPet.Id })"
+                            class="btn btn-danger flex-fill">Delete</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
