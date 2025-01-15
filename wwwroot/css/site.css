@@ -6,25 +6,25 @@
 
 }
 
-.map {
+/* .map {
     padding: 10px;
 
     text-align: center;
     background-color: hsl(40, 33%, 98%)
-}
+} */
 
 .reportlist {
-    padding: 10px;
+    
 
-    text-align: center;
+    
     background-color: hsl(150, 15%, 86%);
 
 }
 
 .headerclass {
-    width: 100%;
+   
     background-size: 40%;
-    padding: 40px 0px 40px 0px;
+   
     background-image: url('/Images/PawHeader.png');
     text-align: center;
 
