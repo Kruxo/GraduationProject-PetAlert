@@ -4,3 +4,70 @@
 <h1>@ViewData["Title"]</h1>
 
 <p>Use this page to detail your site's privacy policy.</p>
+
+
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+
+<div style="text-align: center; margin-bottom: 10px;">
+    <h2 style="font-family: Arial, sans-serif; color: #333;">Explore Found Pets in Your Area</h2>
+</div>
+
+<div id="map-container" style="padding: 20px; display: flex; justify-content: center;">
+    <div id="map" style="
+        height: 60vh; /* Height is responsive to viewport */
+        width: 90%;
+        max-width: 1200px; /* Prevents map from becoming too wide */
+        border-radius: 15px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        border: 2px solid #ccc;
+        margin-bottom: 20px; /* Prevent overlap with footer */
+        overflow: hidden;">
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const map = L.map('map').setView([59.3293, 18.0686], 10);
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+        }).addTo(map);
+
+        // Define a custom icon
+        const customIcon = L.icon({
+            iconUrl: 'https://static-00.iconduck.com/assets.00/fish-icon-1982x2048-xxayvvtg.png', // Path to your custom icon
+            iconSize: [32, 32], // Size of the icon
+            iconAnchor: [16, 32], // Anchor point of the icon (center bottom)
+            popupAnchor: [0, -32] // Point where the popup opens relative to the icon
+        });
+
+        // Markers from the server
+        const markers = @Html.Raw(Json.Serialize(ViewBag.Markers));
+        markers.forEach(marker => {
+            L.marker([marker.latitude, marker.longitude], { icon: customIcon })
+                .addTo(map)
+                .bindPopup(`
+                      <div>
+                        <strong>Name:</strong> ${marker.name}<br>
+                        <strong>Description:</strong> ${marker.description}<br>
+                        <strong>Pet Type:</strong> ${marker.petType}<br>
+                        <img src="${marker.image}" alt="${marker.name}" style="width:100px;height:auto;margin-top:10px;">
+                    </div>
+                
+                `);
+        });
+    });
+</script>
+
+
+

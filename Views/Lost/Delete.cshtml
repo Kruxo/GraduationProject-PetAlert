@@ -1,0 +1,36 @@
+@model LostDeleteVm;
+
+<div class="container my-5" style="text-align: center;">
+    <h1 class="card-title text-danger">Are you sure you want to delete this lost pet entry?</h1>
+    <div class="card shadow-sm rounded mx-auto" style="max-width: 800px;">
+        <div class="row g-0">
+            <!-- Found Pet Image Section -->
+            <div class="col-md-4 d-flex align-items-center justify-content-center p-3">
+                <img src="@Model.LostPet.Image" alt="@Model.LostPet.Name" class="img-fluid rounded"
+                    style="max-height: 200px; object-fit: cover;">
+            </div>
+
+            <!-- Found Pet Details Section -->
+            <div class="col-md-8">
+                <div class="card-body">
+                    <div class="d-flex flex-start">
+                        <h3>@Model.LostPet.Name</h3>
+                    </div>
+                    <hr style="margin-top: 5px;">
+                    <div class="d-flex justify-content-between">
+                        <dt class=""><strong>Description:</strong></dt>
+                        <dd class="">@Model.LostPet.Description</dd>
+                    </div>
+                    <!-- Action Buttons -->
+                    <form asp-action="Delete" class="mt-4">
+                        <input type="hidden" asp-for="LostPet.Id" />
+                        <div class="d-flex gap-3">
+                            <a asp-action="Index" class="btn btn-secondary flex-fill">Cancel</a>
+                            <button type="submit" class="btn btn-danger flex-fill">Delete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

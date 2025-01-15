@@ -6,20 +6,20 @@ using GraduationProject.ViewModels;
 
 namespace GraduationProject.Controllers;
 
-public class FoundController : Controller
+public class LostController : Controller
 {
     private readonly ApplicationDbContext _context;
 
-    public FoundController(ApplicationDbContext context)
+    public LostController(ApplicationDbContext context)
     {
         _context = context;
     }
 
     public async Task<IActionResult> Index()
     {
-        var vm = new FoundIndexVm
+        var vm = new LostIndexVm
         {
-            FoundPets = await _context.FoundPets.ToListAsync(),
+            LostPets = await _context.LostPets.ToListAsync(),
             PetTypes = await _context.PetTypes.ToListAsync()
         };
         return View(vm);
@@ -27,9 +27,9 @@ public class FoundController : Controller
 
     public IActionResult Create()
     {
-        var vm = new FoundCreateVm
+        var vm = new LostCreateVm
         {
-            FoundPet = new Found(),
+            LostPet = new Lost(),
             PetTypes = _context.PetTypes.OrderBy(c => c.Type).ToList()
         };
         return View(vm);
@@ -38,11 +38,11 @@ public class FoundController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     //[Authorize(Roles = RoleConstants.Administrator)]
-    public async Task<IActionResult> CreateAsync(FoundCreateVm createVm)
+    public async Task<IActionResult> CreateAsync(LostCreateVm createVm)
     {
         if (ModelState.IsValid)
         {
-            _context.FoundPets.Add(createVm.FoundPet);
+            _context.LostPets.Add(createVm.LostPet);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
@@ -59,16 +59,16 @@ public class FoundController : Controller
             return NotFound();
         }
 
-        var foundPet = await _context.FoundPets.FindAsync(id);
+        var lostPet = await _context.LostPets.FindAsync(id);
 
-        if (foundPet == null)
+        if (lostPet == null)
         {
             return NotFound();
         }
 
-        var viewModel = new FoundEditVm
+        var viewModel = new LostEditVm
         {
-            FoundPet = foundPet,
+            LostPet = lostPet,
             PetTypes = _context.PetTypes.OrderBy(c => c.Type).ToList()
         };
 
@@ -78,22 +78,22 @@ public class FoundController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     //[Authorize(Roles = RoleConstants.Administrator)]
-    public async Task<IActionResult> Edit(FoundEditVm foundVm)
+    public async Task<IActionResult> Edit(LostEditVm lostVm)
     {
-        var foundPet = foundVm.FoundPet;
+        var lostPet = lostVm.LostPet;
 
         if (ModelState.IsValid)
         {
-            if (!FoundPetExists(foundPet.Id))
+            if (!LostPetExists(lostPet.Id))
             {
                 return NotFound();
             }
 
-            _context.Update(foundPet);
+            _context.Update(lostPet);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        return View(foundVm);
+        return View(lostVm);
     }
 
     //[Authorize(Roles = RoleConstants.Administrator)]
@@ -104,16 +104,16 @@ public class FoundController : Controller
             return NotFound();
         }
 
-        var foundPet = await _context.FoundPets.FirstOrDefaultAsync(m => m.Id == id);
+        var lostPet = await _context.LostPets.FirstOrDefaultAsync(m => m.Id == id);
 
-        if (foundPet == null)
+        if (lostPet == null)
         {
             return NotFound();
         }
 
-        var viewModel = new FoundDeleteVm
+        var viewModel = new LostDeleteVm
         {
-            FoundPet = foundPet,
+            LostPet = lostPet,
             PetTypes = _context.PetTypes.OrderBy(c => c.Type).ToList()
         };
 
@@ -125,19 +125,19 @@ public class FoundController : Controller
     //[Authorize(Roles = RoleConstants.Administrator)]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var foundPet = await _context.FoundPets.FindAsync(id);
-        if (foundPet == null)
+        var lostPet = await _context.LostPets.FindAsync(id);
+        if (lostPet == null)
         {
             return NotFound();
         }
 
-        _context.FoundPets.Remove(foundPet);
+        _context.LostPets.Remove(lostPet);
         await _context.SaveChangesAsync();
         return RedirectToAction(nameof(Index));
     }
 
-    private bool FoundPetExists(int id)
+    private bool LostPetExists(int id)
     {
-        return _context.FoundPets.Any(x => x.Id == id);
+        return _context.LostPets.Any(x => x.Id == id);
     }
 }

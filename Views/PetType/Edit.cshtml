@@ -1,0 +1,23 @@
+@model PetTypeEditVm
+
+<h1 class="text-center my-4">Edit Category</h1>
+
+<div class="d-flex justify-content-center card">
+    <form asp-action="Edit" method="post" class=" p-4 shadow rounded bg-light">
+        <input type="hidden" asp-for="Id" />
+        <div class="mb-3">
+            <label asp-for="Type" class="form-label fw-bold"></label>
+            <input asp-for="Type" class="form-control border-primary" placeholder="Enter new pet type" />
+            <span asp-validation-for="Type" class="text-danger small"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Image" class="form-label fw-bold"></label>
+            <input asp-for="Image" class="form-control border-primary" placeholder="Enter new image url" />
+            <span asp-validation-for="Image" class="text-danger small"></span>
+        </div>
+        <div class="d-flex justify-content-between">
+            <a asp-action="Index" class="btn btn-secondary w-45">Cancel</a>
+            <button type="submit" class="btn btn-primary w-45">Save</button>
+        </div>
+    </form>
+</div>
