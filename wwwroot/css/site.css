@@ -55,3 +55,12 @@ body {
 .very-brown-text {
     color: hsl(30, 10%, 20%);
 }
+/* footer{
+   
+    height: 30px;
+    line-height: 30px;
+    display:flex;
+    flex-direction: row;
+    justify-content:end;
+
+} */
