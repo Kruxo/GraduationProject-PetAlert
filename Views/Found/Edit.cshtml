@@ -1,0 +1,63 @@
+@model FoundEditVm
+
+<h1 class="text-center">Edit Found Pet Entry</h1>
+<div class="d-flex justify-content-center gap-4 p-4 shadow rounded bg-light card">
+    <!-- Picture Section -->
+    <div class="d-flex flex-column align-items-center">
+        <img src="@Model.FoundPet.Image" alt="Found Pet" class="my-4"
+            style="max-width: 200px; max-height: 200px; object-fit: contain; border-radius: 8px;">
+    </div>
+
+    <!-- Form Section -->
+    <div style="flex: 1;">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="FoundPet.Id" />
+
+            <div class="form-group mb-3">
+                <label asp-for="FoundPet.Name" class="control-label"></label>
+                <input asp-for="FoundPet.Name" class="form-control" />
+                <span asp-validation-for="FoundPet.Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="FoundPet.Description" class="control-label"></label>
+                <input asp-for="FoundPet.Description" class="form-control" />
+                <span asp-validation-for="FoundPet.Description" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="FoundPet.Latitude" class="control-label"></label>
+                <input asp-for="FoundPet.Latitude" class="form-control" />
+                <span asp-validation-for="FoundPet.Latitude" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="FoundPet.Longitude" class="control-label"></label>
+                <input asp-for="FoundPet.Longitude" class="form-control" />
+                <span asp-validation-for="FoundPet.Longitude" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="FoundPet.Image" class="control-label"></label>
+                <input asp-for="FoundPet.Image" class="form-control" />
+                <span asp-validation-for="FoundPet.Image" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="FoundPet.PetTypeId" class="control-label">Pet Type</label>
+                <select asp-for="FoundPet.PetTypeId" class="form-control">
+                    <option value="">-- Select Pet Type --</option>
+                    @foreach (var petType in Model.PetTypes)
+                    {
+                        <option value="@petType.Id">@petType.Type</option>
+                    }
+                </select>
+                <span asp-validation-for="FoundPet.PetTypeId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-3">
+                <input type="submit" value="Edit" class="btn btn-primary w-100" />
+            </div>
+        </form>
+    </div>
+</div>
