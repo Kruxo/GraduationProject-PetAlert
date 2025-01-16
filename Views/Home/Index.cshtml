@@ -74,6 +74,7 @@
 
     <div class="container-fluid reportlist p-4" style="display: flex; justify-content: center;">
         <div style="display: flex; justify-content: center; width:90%; max-width: 1200px;">
+            
         <div class="card col-6 me-1 ms-1" >
             <table class="table">
                 
@@ -88,7 +89,7 @@
                   
                       @foreach (var lostPet in Model.LostPets){
                     <tr>
-                        <th><img src="@lostPet.Image" class="image-fit"></th>
+                        <th><img src="@lostPet.Image" class="image-fit" alt="@lostPet.Image"></th>
                         <td>@lostPet.Description</td>
                     </tr>
                     }
@@ -98,33 +99,31 @@
             </table>
         </div>
         
-         <div class="card col-6 ms-1 me-1" >
-            <table class="table">
-                   <thead>
-                    <tr>
-                        <th style="font-size: xx-large;">Found pets</th>
-                        <th></th>
-                    </tr>
-                </thead>    
-                <tbody>
-                
+         <div class="col-6 ms-1 me-1" >
+            <div class="">
+            <ul class="list-unstyled" >
+                   
+                    
+                <p style="font-size: xx-large;">Found pets </p>
+                   
                     @foreach (var foundPet in Model.FoundPets){
                       
-                    <tr>
-                        <th>
-                            <div>
-                            <img src="@foundPet.Image" class="image-fit" alt="@foundPet.Image">
+                        <div class="card mb-1">
+                        <li class="row align-items-start">
+                            <div class="col-auto">
+                            <img src="@foundPet.Image" class="image-fit rounded-left " alt="@foundPet.Image"></div>
+                            <div class="col">
+                                <h5 class="card-title mt-3"><strong>@foundPet.Name</strong></h5>
+                                <p class="card-text">@foundPet.Description</p>
+                        
                             </div>
-                        </th>
-                        <td>@foundPet.Description</td>
-                    </tr>
+                        </li>  
+                        </div>
+                        
                     }
-                    
-                    
-                </tbody>
-
-            </table>
+            </ul>
         </div>
-</div>
+        </div>
     </div>
+</div>
 </body>
