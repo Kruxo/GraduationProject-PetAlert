@@ -1,4 +1,11 @@
+@using Microsoft.AspNetCore.Identity
 @model LostEditVm
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject UserService UserService
+@{
+    var isAdmin = await UserService.IsCurrentUserAdministratorAsync();
+}
 
 <style>
     body {
@@ -10,6 +17,7 @@
         color: hsl(30, 10%, 20%);
         font-size: 2rem;
         margin-bottom: 20px;
+        text-align: center;
     }
 
     .card {
@@ -70,69 +78,83 @@
     }
 </style>
 
-<h1 class="text-center">Edit Found Pet Entry</h1>
-<div class="card">
-    <!-- Picture Section -->
-    <div class="d-flex flex-column align-items-center">
-        <img src="@Model.LostPet.Image" alt="Found Pet">
-    </div>
-
-    <!-- Form Section -->
-    <div style="flex: 1;">
-        <form asp-action="Edit" method="post">
-            <input type="hidden" asp-for="LostPet.Id" />
-
-            <div class="form-group mb-3">
-                <label asp-for="LostPet.Name">Name</label>
-                <input asp-for="LostPet.Name" class="form-control" />
-                <span asp-validation-for="LostPet.Name" class="text-danger"></span>
+@if (SignInManager.IsSignedIn(User))
+{
+    var currentUserId = UserManager.GetUserId(User); //Getting current userId
+    if (Model.LostPet.UserId == currentUserId || isAdmin) //Checking if current userId matches with the owner
+    {
+        <h1>Edit Found Pet Entry</h1>
+        <div class="card">
+            <!-- Picture Section -->
+            <div class="d-flex flex-column align-items-center">
+                <img src="@Model.LostPet.Image" alt="Found Pet">
             </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="LostPet.ChipId">Chip ID</label>
-                <input asp-for="LostPet.ChipId" class="form-control" />
-                <span asp-validation-for="LostPet.ChipId" class="text-danger"></span>
-            </div>
+            <!-- Form Section -->
+            <div style="flex: 1;">
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="LostPet.Id" />
 
-            <div class="form-group mb-3">
-                <label asp-for="LostPet.Description">Description</label>
-                <textarea asp-for="LostPet.Description" class="form-control"></textarea>
-                <span asp-validation-for="LostPet.Description" class="text-danger"></span>
-            </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="LostPet.Name">Name</label>
+                        <input asp-for="LostPet.Name" class="form-control" />
+                        <span asp-validation-for="LostPet.Name" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="LostPet.Latitude">Latitude</label>
-                <input asp-for="LostPet.Latitude" class="form-control" />
-                <span asp-validation-for="LostPet.Latitude" class="text-danger"></span>
-            </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="LostPet.Description">Description</label>
+                        <textarea asp-for="LostPet.Description" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="LostPet.Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="LostPet.ChipId">Chip ID</label>
+                        <input asp-for="LostPet.ChipId" class="form-control" />
+                        <span asp-validation-for="LostPet.ChipId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="LostPet.Latitude">Latitude</label>
+                        <input asp-for="LostPet.Latitude" class="form-control" />
+                        <span asp-validation-for="LostPet.Latitude" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="LostPet.Longitude">Longitude</label>
-                <input asp-for="LostPet.Longitude" class="form-control" />
-                <span asp-validation-for="LostPet.Longitude" class="text-danger"></span>
-            </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="LostPet.Longitude">Longitude</label>
+                        <input asp-for="LostPet.Longitude" class="form-control" />
+                        <span asp-validation-for="LostPet.Longitude" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="LostPet.Image">Image URL</label>
-                <input asp-for="LostPet.Image" class="form-control" />
-                <span asp-validation-for="LostPet.Image" class="text-danger"></span>
-            </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="LostPet.Image">Image URL</label>
+                        <input asp-for="LostPet.Image" class="form-control" />
+                        <span asp-validation-for="LostPet.Image" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="LostPet.PetTypeId">Pet Type</label>
-                <select asp-for="LostPet.PetTypeId" class="form-control">
-                    <option value="">-- Select Pet Type --</option>
-                    @foreach (var petType in Model.PetTypes)
-                    {
-                        <option value="@petType.Id">@petType.Type</option>
-                    }
-                </select>
-                <span asp-validation-for="LostPet.PetTypeId" class="text-danger"></span>
-            </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="LostPet.PetTypeId">Pet Type</label>
+                        <select asp-for="LostPet.PetTypeId" class="form-control">
+                            <option value="">-- Select Pet Type --</option>
+                            @foreach (var petType in Model.PetTypes)
+                            {
+                                <option value="@petType.Id">@petType.Type</option>
+                            }
+                        </select>
+                        <span asp-validation-for="LostPet.PetTypeId" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group mt-4">
-                <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                    <div class="form-group mt-4">
+                        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-</div>
+        </div>
+
+    }
+    else
+    {
+        <div class="container text-center">
+            <div class="alert large fw-bold">
+                You do not have access to this page.
+            </div>
+        </div>
+    }
+}

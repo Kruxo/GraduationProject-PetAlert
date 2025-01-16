@@ -1,4 +1,11 @@
+@using Microsoft.AspNetCore.Identity
 @model FoundEditVm
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject UserService UserService
+@{
+    var isAdmin = await UserService.IsCurrentUserAdministratorAsync();
+}
 
 <style>
     body {
@@ -71,63 +78,79 @@
     }
 </style>
 
-<h1>Edit Found Pet Entry</h1>
-<div class="card">
-    <!-- Picture Section -->
-    <div class="d-flex flex-column align-items-center">
-        <img src="@Model.FoundPet.Image" alt="Found Pet">
-    </div>
-
-    <!-- Form Section -->
-    <div style="flex: 1;">
-        <form asp-action="Edit" method="post">
-            <input type="hidden" asp-for="FoundPet.Id" />
-
-            <div class="form-group mb-3">
-                <label asp-for="FoundPet.Name">Name</label>
-                <input asp-for="FoundPet.Name" class="form-control" />
-                <span asp-validation-for="FoundPet.Name" class="text-danger"></span>
+@if (SignInManager.IsSignedIn(User))
+{
+    var currentUserId = UserManager.GetUserId(User); //Getting current userId
+    if (Model.FoundPet.UserId == currentUserId || isAdmin) //Checking if current userId matches with the owner
+    {
+        <h1>Edit Found Pet Entry</h1>
+        <div class="card">
+            <!-- Picture Section -->
+            <div class="d-flex flex-column align-items-center">
+                <img src="@Model.FoundPet.Image" alt="Found Pet">
             </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="FoundPet.Description">Description</label>
-                <textarea asp-for="FoundPet.Description" class="form-control" rows="3"></textarea>
-                <span asp-validation-for="FoundPet.Description" class="text-danger"></span>
-            </div>
+            <!-- Form Section -->
+            <div style="flex: 1;">
+                <form asp-action="Edit" method="post">
+                    <input type="hidden" asp-for="FoundPet.Id" />
 
-            <div class="form-group mb-3">
-                <label asp-for="FoundPet.Latitude">Latitude</label>
-                <input asp-for="FoundPet.Latitude" class="form-control" />
-                <span asp-validation-for="FoundPet.Latitude" class="text-danger"></span>
-            </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="FoundPet.Name">Name</label>
+                        <input asp-for="FoundPet.Name" class="form-control" />
+                        <span asp-validation-for="FoundPet.Name" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="FoundPet.Longitude">Longitude</label>
-                <input asp-for="FoundPet.Longitude" class="form-control" />
-                <span asp-validation-for="FoundPet.Longitude" class="text-danger"></span>
-            </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="FoundPet.Description">Description</label>
+                        <textarea asp-for="FoundPet.Description" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="FoundPet.Description" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="FoundPet.Image">Image URL</label>
-                <input asp-for="FoundPet.Image" class="form-control" />
-                <span asp-validation-for="FoundPet.Image" class="text-danger"></span>
-            </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="FoundPet.Latitude">Latitude</label>
+                        <input asp-for="FoundPet.Latitude" class="form-control" />
+                        <span asp-validation-for="FoundPet.Latitude" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="FoundPet.PetTypeId">Pet Type</label>
-                <select asp-for="FoundPet.PetTypeId" class="form-control">
-                    <option value="">-- Select Pet Type --</option>
-                    @foreach (var petType in Model.PetTypes)
-                    {
-                        <option value="@petType.Id">@petType.Type</option>
-                    }
-                </select>
-                <span asp-validation-for="FoundPet.PetTypeId" class="text-danger"></span>
-            </div>
+                    <div class="form-group mb-3">
+                        <label asp-for="FoundPet.Longitude">Longitude</label>
+                        <input asp-for="FoundPet.Longitude" class="form-control" />
+                        <span asp-validation-for="FoundPet.Longitude" class="text-danger"></span>
+                    </div>
 
-            <div class="form-group mt-4">
-                <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                    <div class="form-group mb-3">
+                        <label asp-for="FoundPet.Image">Image URL</label>
+                        <input asp-for="FoundPet.Image" class="form-control" />
+                        <span asp-validation-for="FoundPet.Image" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="FoundPet.PetTypeId">Pet Type</label>
+                        <select asp-for="FoundPet.PetTypeId" class="form-control">
+                            <option value="">-- Select Pet Type --</option>
+                            @foreach (var petType in Model.PetTypes)
+                            {
+                                <option value="@petType.Id">@petType.Type</option>
+                            }
+                        </select>
+                        <span asp-validation-for="FoundPet.PetTypeId" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group mt-4">
+                        <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                    </div>
+                </form>
             </div>
-        </form>
-    </div>
-</div>
+        </div>
+
+    }
+    else
+    {
+        <div class="container text-center">
+            <div class="alert large fw-bold">
+                You do not have access to this page.
+            </div>
+        </div>
+    }
+}

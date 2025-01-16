@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject UserService UserService
+@{
+    var isAdmin = await UserService.IsCurrentUserAdministratorAsync();
+}
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -25,50 +33,59 @@
                     </button>
                     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                         <ul class="navbar-nav d-flex justify-content-start">
-                            @* <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home"
-                                asp-action="Privacy">Privacy</a>
-                        </li> *@
                         </ul>
                         <ul class="navbar-nav d-flex justify-content-end">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Lost"
-                                    asp-action="Index">Report
-                                    Lost Pet</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Lost" asp-action="Index">
+                                    Lost Pets</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Lost" asp-action="Create">
-                                    Create Lost Pet</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Found"
-                                    asp-action="Index">Report
-                                    Found Pet</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Found" asp-action="Create">
-                                    Create Found Pet</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="PetType" asp-action="Index">
-                                    Pet Types</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Found" asp-action="Index">
+                                    Found Pets</a>
                             </li>
 
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Sign in</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Identity"
-                                    asp-page="/Account/Register">Register</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout">Log out</a>
-                            </li>
+                            @if (isAdmin)
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Lost" asp-action="Create">
+                                        Create Lost Pet</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Found" asp-action="Create">
+                                        Create Found Pet</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="PetType" asp-action="Index">
+                                        Pet Types</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout">Log out</a>
+                                </li>
+                            }
+                            else if (SignInManager.IsSignedIn(User))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Lost" asp-action="Create">
+                                        Create Lost Pet</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Found" asp-action="Create">
+                                        Create Found Pet</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout">Log out</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Sign in</a>
+                                </li>
+                            }
+
+
                         </ul>
-                        </ul>
+
                     </div>
                 </div>
             </nav>

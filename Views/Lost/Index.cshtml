@@ -1,123 +1,149 @@
+@using Microsoft.AspNetCore.Identity
 @model LostIndexVm
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject UserService UserService
+@{
+    var isAdmin = await UserService.IsCurrentUserAdministratorAsync();
+}
 
 <style>
-    .card {
-        width: 20rem;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-        border: none;
-        border-radius: 16px;
-        overflow: hidden;
+    body {
         background-color: #fff9f4;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
-    .card:hover {
-        transform: scale(1.03);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-    }
-
-    .card-title {
-        font-size: 1.5rem;
-        font-weight: bold;
-        color: hsl(30, 10%, 20%);
-    }
-
-    .card-text {
-        font-size: 0.95rem;
-        color: hsl(30, 10%, 45%);
-    }
-
-    .card-img-top {
-        height: 180px;
-        object-fit: cover;
-        background-color: #f0e4d7;
-    }
-
-    .card-body {
-        padding: 20px;
-    }
-
-    .btn {
-        border-radius: 8px;
-        font-weight: bold;
-        font-size: 0.95rem;
-        transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-
-    .btn-warning {
-        background-color: hsl(28, 54%, 44%);
-        border: none;
-        color: white;
-    }
-
-    .btn-warning:hover {
-        background-color: hsl(28, 54%, 39%);
-        transform: translateY(-2px);
-    }
-
-    .btn-danger {
-        background-color: hsl(0, 78%, 55%);
-        border: none;
-        color: white;
-    }
-
-    .btn-danger:hover {
-        background-color: hsl(0, 78%, 50%);
-        transform: translateY(-2px);
-    }
-
-    .list-unstyled li {
-        font-size: 0.9rem;
-        color: hsl(30, 10%, 45%);
-    }
-
-    .alert-info {
-        background-color: hsl(30, 10%, 96%);
-        border: 1px solid hsl(30, 10%, 85%);
-        color: hsl(30, 10%, 45%);
     }
 
     h1 {
         color: hsl(30, 10%, 20%);
+        font-size: 2rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .card {
+        width: 18rem;
+        background-color: #ffffff;
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card img {
+        border-radius: 16px 16px 0 0;
+        max-height: 150px;
+        object-fit: cover;
+    }
+
+    .card-title {
+        color: hsl(30, 10%, 20%);
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    .card-text {
+        font-size: 0.9rem;
+        color: hsl(30, 10%, 40%);
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .btn-warning {
+        background-color: hsl(45, 90%, 50%);
+        border: none;
+        color: white;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-warning:hover {
+        background-color: hsl(45, 90%, 45%);
+        transform: translateY(-2px);
+    }
+
+    .btn-danger {
+        background-color: hsl(0, 70%, 50%);
+        border: none;
+        color: white;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-danger:hover {
+        background-color: hsl(0, 70%, 45%);
+        transform: translateY(-2px);
+    }
+
+    .alert {
+        background-color: hsl(30, 20%, 90%);
+        color: hsl(30, 10%, 25%);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        font-size: 1rem;
+        font-weight: bold;
     }
 </style>
 
-<h1 class="text-center my-4">Lost Pets</h1>
-
-@if (!Model.LostPets.Any())
-{
-    <div class="alert alert-info text-center">
-        No lost pets available.
-    </div>
-}
-else
-{
-    <div class="d-flex flex-wrap justify-content-center">
-        @foreach (var lostPet in Model.LostPets)
-        {
-            <div class="card m-3">
-                <img src="@lostPet.Image" class="card-img-top" alt="@lostPet.Name" />
-                <div class="card-body">
-                    <h5 class="card-title text-center">@lostPet.Name</h5>
-                    <p class="card-text text-center">@lostPet.Description</p>
-                    <hr class="my-3">
-                    <ul class="list-unstyled">
-                        <li class="d-flex justify-content-between">
-                            <strong>Pet Type:</strong>
-                            <span>@(Model.PetTypes.FirstOrDefault(t => t.Id == lostPet.PetTypeId)?.Type)</span>
-                        </li>
-                        <li class="d-flex justify-content-between">
+<div class="container">
+    <h1>Found Pets</h1>
+    @if (!Model.LostPets.Any())
+    {
+        <div class="alert">
+            No found pets available.
+        </div>
+    }
+    else
+    {
+        <div class="d-flex flex-wrap justify-content-center">
+            @foreach (var lostPet in Model.LostPets)
+            {
+                <div class="card">
+                    <img src="@lostPet.Image" alt="@lostPet.Name" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">@lostPet.Name</h5>
+                        <p class="card-text">@lostPet.Description</p>
+                        <p class="card-text">@lostPet.User?.PhoneNumber</p>
+                        <p class="card-text">@lostPet.User?.UserName</p>
+                        <hr>
+                        <ul class="list-unstyled">
+                            <li class="d-flex justify-content-between">
+                                <strong>Pet Type:</strong>
+                                <span>@(Model.PetTypes.FirstOrDefault(t => t.Id == lostPet.PetTypeId)?.Type)</span>
+                            </li>
+                                                    <li class="d-flex justify-content-between">
                             <strong>Chip ID:</strong>
                             <span>@lostPet.ChipId</span>
                         </li>
-                    </ul>
-                    <div class="d-flex gap-2 mt-3">
-                        <a asp-action="Edit" asp-route-id="@lostPet.Id" class="btn btn-warning flex-fill">Edit</a>
-                        <a href="@Url.Action("Delete", "Lost", new { id = lostPet.Id })"
-                            class="btn btn-danger flex-fill">Delete</a>
+                        </ul>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            var currentUserId = UserManager.GetUserId(User); //Getting current userId
+                            if (lostPet.UserId == currentUserId || isAdmin) //Checking if current userId matches with the owner of the reported pet
+                            {
+                                <div class="d-flex gap-2">
+                                    <a asp-action="Edit" asp-route-id="@lostPet.Id" class="btn btn-warning flex-fill">Edit</a>
+                                    <a href="@Url.Action("Delete", "Found", new { id = lostPet.Id })"
+                                        class="btn btn-danger flex-fill">Delete</a>
+                                </div>
+                            }
+                        }
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-}
+            }
+        </div>
+    }
+</div>
+

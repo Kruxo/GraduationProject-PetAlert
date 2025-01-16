@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace GraduationProject.Models;
 
@@ -12,6 +13,8 @@ public class Lost
     public string Image { get; set; } = "";
     public string Latitude { get; set; } = "";
     public string Longitude { get; set; } = "";
+    [ForeignKey("UserId")]
+    public virtual IdentityUser? User { get; set; }
     public string UserId { get; set; } = "";
 
     [ForeignKey("PetType")]

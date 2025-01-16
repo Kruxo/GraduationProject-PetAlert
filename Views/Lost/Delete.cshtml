@@ -1,4 +1,11 @@
+@using Microsoft.AspNetCore.Identity
 @model LostDeleteVm
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject UserService UserService
+@{
+    var isAdmin = await UserService.IsCurrentUserAdministratorAsync();
+}
 
 <style>
     body {
@@ -74,33 +81,49 @@
     }
 </style>
 
-<div class="container text-center">
-    <h1>Are you sure you want to delete this lost pet entry?</h1>
-    <div class="card shadow-sm mx-auto">
-        <div class="row g-0">
-            <!-- Lost Pet Image Section -->
-            <div class="col-md-4 d-flex align-items-center justify-content-center p-3">
-                <img src="@Model.LostPet.Image" alt="@Model.LostPet.Name" class="img-fluid">
-            </div>
-
-            <!-- Lost Pet Details Section -->
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h3 style="color: hsl(30, 10%, 20%);">@Model.LostPet.Name</h3>
-                    <hr>
-                    <div class="d-flex justify-content-between">
-                        <dt><strong>Description:</strong></dt>
-                        <dd>@Model.LostPet.Description</dd>
+@if (SignInManager.IsSignedIn(User))
+{
+    var currentUserId = UserManager.GetUserId(User); //Getting current userId
+    if (Model.LostPet.UserId == currentUserId || isAdmin) //Checking if current userId matches with the owner
+    {
+        <div class="container text-center">
+            <h1>Are you sure you want to delete this found pet entry?</h1>
+            <div class="card shadow-sm mx-auto">
+                <div class="row g-0">
+                    <!-- Found Pet Image Section -->
+                    <div class="col-md-4 d-flex align-items-center justify-content-center p-3">
+                        <img src="@Model.LostPet.Image" alt="@Model.LostPet.Name" class="img-fluid">
                     </div>
-                    <form asp-action="Delete" class="mt-4">
-                        <input type="hidden" asp-for="LostPet.Id" />
-                        <div class="d-flex gap-3">
-                            <a asp-action="Index" class="btn btn-secondary flex-fill">Cancel</a>
-                            <button type="submit" class="btn btn-danger flex-fill">Delete</button>
+
+                    <!-- Found Pet Details Section -->
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h3 style="color: hsl(30, 10%, 20%);">@Model.LostPet.Name</h3>
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                                <dt><strong>Description:</strong></dt>
+                                <dd>@Model.LostPet.Description</dd>
+                            </div>
+                            <form asp-action="Delete" class="mt-4">
+                                <input type="hidden" asp-for="LostPet.Id" />
+                                <div class="d-flex gap-3">
+                                    <a asp-action="Index" class="btn btn-secondary flex-fill">Cancel</a>
+                                    <button type="submit" class="btn btn-danger flex-fill">Delete</button>
+                                </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+
+    }
+    else
+    {
+        <div class="container text-center">
+            <div class="alert large fw-bold">
+                You do not have access to this page.
+            </div>
+        </div>
+    }
+}
