@@ -1,11 +1,5 @@
 @model LostCreateVm
 
-<!-- Include Leaflet and Leaflet Control Geocoder -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-
-
 <style>
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -165,9 +159,6 @@
 </div>
 
 
-
-
-
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Initialize the map centered on Stockholm
@@ -188,7 +179,6 @@
             document.getElementById('latDisplay').textContent = `Latitude: ${lat}`;
             document.getElementById('lngDisplay').textContent = `Longitude: ${lng}`;
         }
-
 
         // Function to place a marker
         function placeMarker(lat, lng) {
