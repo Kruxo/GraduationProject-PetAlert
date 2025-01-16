@@ -14,17 +14,15 @@
 } */
 
 .reportlist {
-    
 
-    
+
+
     background-color: hsl(150, 15%, 86%);
 
 }
 
 .headerclass {
-   
     background-size: 40%;
-   
     background-image: url('/Images/PawHeader.png');
     text-align: center;
 
@@ -55,6 +53,7 @@ body {
 .very-brown-text {
     color: hsl(30, 10%, 20%);
 }
+
 /* footer{
    
     height: 30px;
@@ -63,4 +62,15 @@ body {
     flex-direction: row;
     justify-content:end;
 
+} */
+
+.image-fit {
+    height: 150px;
+    width: 150px;
+    object-fit: cover;
+    border-radius: 1%;
+}
+
+/* table {
+    border-radius: 15%;
 } */
