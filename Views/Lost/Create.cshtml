@@ -1,82 +1,83 @@
-@model LostCreateVm;
+@model LostCreateVm
 
 <style>
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background-color: #fff9f4;
-        margin: 0;
-        padding: 0;
     }
 
     .form-container {
         max-width: 600px;
         margin: 40px auto;
         background-color: #ffffff;
-        border-radius: 20px;
-        border: 2px solid #e6ccb4;
+        border-radius: 16px;
+        border: 1px solid #e6ccb4;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
         padding: 30px;
     }
 
     .form-title {
-        font-size: 26px;
+        font-size: 28px;
         font-weight: bold;
         text-align: center;
-        margin-bottom: 10px;
-        color: #333333;
+        margin-bottom: 15px;
+        color: hsl(30, 10%, 20%);
     }
 
     .form-description {
         text-align: center;
-        color: #777777;
-        font-size: 14px;
-        margin-bottom: 20px;
+        color: hsl(30, 10%, 40%);
+        font-size: 16px;
+        margin-bottom: 25px;
     }
 
     .form-group {
         margin-bottom: 20px;
     }
 
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: hsl(30, 10%, 35%);
+    }
+
     .form-control {
         width: 100%;
         padding: 12px 15px;
         font-size: 16px;
-        border: 2px solid #e6ccb4;
+        border: 2px solid hsl(30, 20%, 85%);
         border-radius: 12px;
-        box-sizing: border-box;
-        background-color: #fff9f4;
+        background-color: #fffaf4;
         transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
     .form-control:focus {
         outline: none;
-        border-color: #a26b3d;
-        box-shadow: 0 0 8px rgba(162, 107, 61, 0.5);
-        background-color: #ffffff;
+        border-color: hsl(30, 30%, 65%);
+        box-shadow: 0 0 8px rgba(162, 107, 61, 0.4);
     }
 
-    .form-label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: bold;
-        color: #555555;
+    .form-control::placeholder {
+        color: hsl(30, 10%, 65%);
     }
 
     .btn {
-        background-color: #854d20;
+        display: block;
+        width: 100%;
+        background-color: hsl(30, 60%, 35%);
         color: white;
         border: none;
-        padding: 12px 20px;
+        padding: 14px 20px;
         font-size: 16px;
-        cursor: pointer;
         border-radius: 12px;
-        text-align: center;
-        transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        width: 100%;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     .btn:hover {
-        background-color: #854d20;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        background-color: hsl(30, 60%, 30%);
+        transform: translateY(-2px);
     }
 
     select.form-control {
@@ -87,15 +88,20 @@
     textarea.form-control {
         resize: none;
     }
+
+    .text-danger {
+        font-size: 14px;
+        color: hsl(0, 70%, 50%);
+    }
 </style>
 
 <div class="form-container">
-    <h1 class="form-title">Create New Report</h1>
-    <p class="form-description">Fill out the details about the found pet</p>
+    <h1 class="form-title">Create Lost Pet Report</h1>
+    <p class="form-description">Fill out the details about the lost pet</p>
     <form asp-action="Create" method="post">
         <div class="form-group">
             <label asp-for="LostPet.Name" class="form-label">Pet Name</label>
-            <input asp-for="LostPet.Name" class="form-control" />
+            <input asp-for="LostPet.Name" class="form-control" placeholder="Enter pet name" />
             <span asp-validation-for="LostPet.Name" class="text-danger"></span>
         </div>
 
@@ -110,16 +116,17 @@
             </select>
             <span asp-validation-for="LostPet.PetTypeId" class="text-danger"></span>
         </div>
+
         <div class="form-group">
             <label asp-for="LostPet.ChipId" class="form-label">Chip ID</label>
-            <input asp-for="LostPet.ChipId" class="form-control"
-                placeholder="Enter the pet's Chip ID, leave blank if the pet doesn't have one" />
+            <input asp-for="LostPet.ChipId" class="form-control" placeholder="Enter the pet's Chip ID (optional)" />
             <span asp-validation-for="LostPet.ChipId" class="text-danger"></span>
         </div>
+
         <div class="form-group">
             <label asp-for="LostPet.Description" class="form-label">Description</label>
             <textarea asp-for="LostPet.Description" class="form-control" rows="3"
-                placeholder="Provide details about the pet (color, breed, distinguishing features, etc.)"></textarea>
+                placeholder="Provide details about the pet (color, breed, etc.)"></textarea>
             <span asp-validation-for="LostPet.Description" class="text-danger"></span>
         </div>
 
@@ -137,7 +144,7 @@
 
         <div class="form-group">
             <label asp-for="LostPet.Image" class="form-label">Image</label>
-            <input asp-for="LostPet.Image" class="form-control" placeholder="Enter an Image-URL" />
+            <input asp-for="LostPet.Image" class="form-control" placeholder="Enter an image URL" />
             <span asp-validation-for="LostPet.Image" class="text-danger"></span>
         </div>
 

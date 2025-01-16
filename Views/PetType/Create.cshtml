@@ -1,23 +1,78 @@
-@model PetTypeCreateVm;
+@model PetTypeCreateVm
 
-<h1 class="text-center my-4">Create Pet Type</h1>
-<div class="d-flex justify-content-center card">
-    <form asp-action="Create" method="post" class="p-4 shadow rounded bg-light">
+<style>
+    .form-container {
+        max-width: 500px;
+        margin: 40px auto;
+        background-color: #ffffff;
+        border-radius: 16px;
+        border: 1px solid #e6ccb4;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+    }
 
-        <div class="form-group mb-3">
-            <label asp-for="Type" class="control-label">Pet Type</label>
-            <input asp-for="Type" class="form-control" />
+    .form-title {
+        font-size: 28px;
+        font-weight: bold;
+        text-align: center;
+        color: hsl(30, 10%, 20%);
+        margin-bottom: 15px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        font-weight: bold;
+        color: hsl(30, 10%, 35%);
+    }
+
+    .form-control {
+        border: 2px solid hsl(30, 20%, 85%);
+        border-radius: 12px;
+        background-color: #fffaf4;
+        padding: 12px 15px;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: hsl(30, 30%, 65%);
+        box-shadow: 0 0 8px rgba(162, 107, 61, 0.4);
+    }
+
+    .btn {
+        display: block;
+        width: 100%;
+        background-color: hsl(30, 60%, 35%);
+        color: white;
+        font-weight: bold;
+        padding: 12px 15px;
+        border-radius: 12px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn:hover {
+        background-color: hsl(30, 60%, 30%);
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="form-container">
+    <h1 class="form-title">Create Pet Type</h1>
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label asp-for="Type" class="form-label">Pet Type</label>
+            <input asp-for="Type" class="form-control" placeholder="Enter pet type" />
             <span asp-validation-for="Type" class="text-danger"></span>
         </div>
 
-        <div class="form-group mb-3">
-            <label asp-for="Image" class="control-label">Image</label>
-            <input asp-for="Image" class="form-control" />
+        <div class="form-group">
+            <label asp-for="Image" class="form-label">Image</label>
+            <input asp-for="Image" class="form-control" placeholder="Enter image URL" />
             <span asp-validation-for="Image" class="text-danger"></span>
         </div>
 
-        <div class="form-group d-grid">
-            <input type="submit" value="Create" class="btn btn-primary " />
-        </div>
+        <button type="submit" class="btn">Create</button>
     </form>
 </div>

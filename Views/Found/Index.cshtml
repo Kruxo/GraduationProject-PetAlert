@@ -1,40 +1,130 @@
 @model FoundIndexVm
 
-<h1 class="text-center my-4">Found Pets</h1>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #fff9f4;
+    }
 
-@if (!Model.FoundPets.Any())
-{
-    <div class="alert alert-info text-center">
-        No found pets available.
-    </div>
-}
-else
-{
-    <div class="d-flex flex-wrap justify-content-center">
-        @foreach (var foundPet in Model.FoundPets)
-        {
-            <div class="card m-3"
-                style="width: 20rem; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border: 1px solid rgba(194, 194, 194, 0.185); border-radius: 10px;">
+    h1 {
+        color: hsl(30, 10%, 20%);
+        font-size: 2rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+    }
 
-                <div class="card-body">
-                    <h5 class="card-title text-center mb-2">@foundPet.Name</h5>
-                    <p class="card-text text-muted text-center">@foundPet.Description</p>
-                    <img src="@foundPet.Image" class="card-img-top rounded-top" alt="@foundPet.Image"
-                        style="height: 150px; width: auto; object-fit: contain; margin: auto; padding-top: 10px">
-                    <hr class="my-3">
-                    <ul class="list-unstyled mb-3">
-                        <li class="d-flex justify-content-between">
-                            <span><strong>Pet Type:</strong></span>
-                            <span>@(Model.PetTypes.FirstOrDefault(t => t.Id == foundPet.PetTypeId)?.Type)</span>
-                        </li>
-                    </ul>
-                    <div class="d-flex gap-2">
-                        <a asp-action="Edit" asp-route-id="@foundPet.Id" class="btn btn-warning flex-fill">Edit</a>
-                        <a href="@Url.Action("Delete", "Found", new { id = foundPet.Id })"
-                            class="btn btn-danger flex-fill">Delete</a>
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .card {
+        width: 18rem;
+        background-color: #ffffff;
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card img {
+        border-radius: 16px 16px 0 0;
+        max-height: 150px;
+        object-fit: cover;
+    }
+
+    .card-title {
+        color: hsl(30, 10%, 20%);
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    .card-text {
+        font-size: 0.9rem;
+        color: hsl(30, 10%, 40%);
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .btn-warning {
+        background-color: hsl(45, 90%, 50%);
+        border: none;
+        color: white;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-warning:hover {
+        background-color: hsl(45, 90%, 45%);
+        transform: translateY(-2px);
+    }
+
+    .btn-danger {
+        background-color: hsl(0, 70%, 50%);
+        border: none;
+        color: white;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-danger:hover {
+        background-color: hsl(0, 70%, 45%);
+        transform: translateY(-2px);
+    }
+
+    .alert {
+        background-color: hsl(30, 20%, 90%);
+        color: hsl(30, 10%, 25%);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        font-size: 1rem;
+        font-weight: bold;
+    }
+</style>
+
+<div class="container">
+    <h1>Found Pets</h1>
+
+    @if (!Model.FoundPets.Any())
+    {
+        <div class="alert">
+            No found pets available.
+        </div>
+    }
+    else
+    {
+        <div class="d-flex flex-wrap justify-content-center">
+            @foreach (var foundPet in Model.FoundPets)
+            {
+                <div class="card">
+                    <img src="@foundPet.Image" alt="@foundPet.Name" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">@foundPet.Name</h5>
+                        <p class="card-text">@foundPet.Description</p>
+                        <hr>
+                        <ul class="list-unstyled">
+                            <li class="d-flex justify-content-between">
+                                <strong>Pet Type:</strong>
+                                <span>@(Model.PetTypes.FirstOrDefault(t => t.Id == foundPet.PetTypeId)?.Type)</span>
+                            </li>
+                        </ul>
+                        <div class="d-flex gap-2">
+                            <a asp-action="Edit" asp-route-id="@foundPet.Id" class="btn btn-warning flex-fill">Edit</a>
+                            <a href="@Url.Action("Delete", "Found", new { id = foundPet.Id })"
+                                class="btn btn-danger flex-fill">Delete</a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-}
+            }
+        </div>
+    }
+</div>

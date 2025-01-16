@@ -1,11 +1,81 @@
 @model FoundEditVm
 
-<h1 class="text-center">Edit Found Pet Entry</h1>
-<div class="d-flex justify-content-center gap-4 p-4 shadow rounded bg-light card">
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #fff9f4;
+    }
+
+    h1 {
+        color: hsl(30, 10%, 20%);
+        font-size: 2rem;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .card {
+        max-width: 900px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        color: hsl(30, 10%, 45%);
+    }
+
+    .form-control {
+        padding: 12px;
+        border: 1px solid #e6ccb4;
+        border-radius: 8px;
+        background-color: #fff9f4;
+        transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: hsl(28, 54%, 44%);
+        box-shadow: 0 0 6px rgba(162, 107, 61, 0.5);
+    }
+
+    .btn-primary {
+        background-color: hsl(28, 54%, 44%);
+        border: none;
+        color: white;
+        padding: 12px;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        font-weight: bold;
+    }
+
+    .btn-primary:hover {
+        background-color: hsl(28, 54%, 39%);
+        transform: translateY(-2px);
+    }
+
+    img {
+        border-radius: 8px;
+        max-width: 200px;
+        max-height: 200px;
+        object-fit: cover;
+        background-color: #f0e4d7;
+    }
+
+    .d-flex {
+        gap: 20px;
+    }
+</style>
+
+<h1>Edit Found Pet Entry</h1>
+<div class="card">
     <!-- Picture Section -->
     <div class="d-flex flex-column align-items-center">
-        <img src="@Model.FoundPet.Image" alt="Found Pet" class="my-4"
-            style="max-width: 200px; max-height: 200px; object-fit: contain; border-radius: 8px;">
+        <img src="@Model.FoundPet.Image" alt="Found Pet">
     </div>
 
     <!-- Form Section -->
@@ -14,37 +84,37 @@
             <input type="hidden" asp-for="FoundPet.Id" />
 
             <div class="form-group mb-3">
-                <label asp-for="FoundPet.Name" class="control-label"></label>
+                <label asp-for="FoundPet.Name">Name</label>
                 <input asp-for="FoundPet.Name" class="form-control" />
                 <span asp-validation-for="FoundPet.Name" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="FoundPet.Description" class="control-label"></label>
-                <input asp-for="FoundPet.Description" class="form-control" />
+                <label asp-for="FoundPet.Description">Description</label>
+                <textarea asp-for="FoundPet.Description" class="form-control" rows="3"></textarea>
                 <span asp-validation-for="FoundPet.Description" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="FoundPet.Latitude" class="control-label"></label>
+                <label asp-for="FoundPet.Latitude">Latitude</label>
                 <input asp-for="FoundPet.Latitude" class="form-control" />
                 <span asp-validation-for="FoundPet.Latitude" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="FoundPet.Longitude" class="control-label"></label>
+                <label asp-for="FoundPet.Longitude">Longitude</label>
                 <input asp-for="FoundPet.Longitude" class="form-control" />
                 <span asp-validation-for="FoundPet.Longitude" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="FoundPet.Image" class="control-label"></label>
+                <label asp-for="FoundPet.Image">Image URL</label>
                 <input asp-for="FoundPet.Image" class="form-control" />
                 <span asp-validation-for="FoundPet.Image" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
-                <label asp-for="FoundPet.PetTypeId" class="control-label">Pet Type</label>
+                <label asp-for="FoundPet.PetTypeId">Pet Type</label>
                 <select asp-for="FoundPet.PetTypeId" class="form-control">
                     <option value="">-- Select Pet Type --</option>
                     @foreach (var petType in Model.PetTypes)
@@ -55,8 +125,8 @@
                 <span asp-validation-for="FoundPet.PetTypeId" class="text-danger"></span>
             </div>
 
-            <div class="form-group mt-3">
-                <input type="submit" value="Edit" class="btn btn-primary w-100" />
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-primary w-100">Save Changes</button>
             </div>
         </form>
     </div>

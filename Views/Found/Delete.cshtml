@@ -1,27 +1,97 @@
-@model FoundDeleteVm;
+@model FoundDeleteVm
 
-<div class="container my-5" style="text-align: center;">
-    <h1 class="card-title text-danger">Are you sure you want to delete this found pet entry?</h1>
-    <div class="card shadow-sm rounded mx-auto" style="max-width: 800px;">
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #fff9f4;
+    }
+
+    .container {
+        max-width: 900px;
+        margin: 20px auto;
+        padding: 20px;
+    }
+
+    h1 {
+        color: hsl(0, 70%, 50%);
+        font-size: 1.8rem;
+        font-weight: bold;
+        margin-bottom: 30px;
+    }
+
+    .card {
+        background-color: #ffffff;
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+
+    img {
+        border-radius: 12px;
+        background-color: #f0e4d7;
+        max-height: 200px;
+        object-fit: cover;
+    }
+
+    hr {
+        border: none;
+        border-top: 1px solid hsl(30, 10%, 80%);
+        margin: 10px 0;
+    }
+
+    .btn-secondary {
+        background-color: hsl(30, 10%, 45%);
+        color: #ffffff;
+        border: none;
+        padding: 10px;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+        background-color: hsl(30, 10%, 40%);
+        transform: translateY(-2px);
+    }
+
+    .btn-danger {
+        background-color: hsl(0, 70%, 50%);
+        color: white;
+        border: none;
+        padding: 10px;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-danger:hover {
+        background-color: hsl(0, 70%, 45%);
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="container text-center">
+    <h1>Are you sure you want to delete this found pet entry?</h1>
+    <div class="card shadow-sm mx-auto">
         <div class="row g-0">
             <!-- Found Pet Image Section -->
             <div class="col-md-4 d-flex align-items-center justify-content-center p-3">
-                <img src="@Model.FoundPet.Image" alt="@Model.FoundPet.Name" class="img-fluid rounded"
-                    style="max-height: 200px; object-fit: cover;">
+                <img src="@Model.FoundPet.Image" alt="@Model.FoundPet.Name" class="img-fluid">
             </div>
 
             <!-- Found Pet Details Section -->
             <div class="col-md-8">
                 <div class="card-body">
-                    <div class="d-flex flex-start">
-                        <h3>@Model.FoundPet.Name</h3>
-                    </div>
-                    <hr style="margin-top: 5px;">
+                    <h3 style="color: hsl(30, 10%, 20%);">@Model.FoundPet.Name</h3>
+                    <hr>
                     <div class="d-flex justify-content-between">
-                        <dt class=""><strong>Description:</strong></dt>
-                        <dd class="">@Model.FoundPet.Description</dd>
+                        <dt><strong>Description:</strong></dt>
+                        <dd>@Model.FoundPet.Description</dd>
                     </div>
-                    <!-- Action Buttons -->
                     <form asp-action="Delete" class="mt-4">
                         <input type="hidden" asp-for="FoundPet.Id" />
                         <div class="d-flex gap-3">

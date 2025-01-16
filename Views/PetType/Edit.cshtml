@@ -1,23 +1,102 @@
 @model PetTypeEditVm
 
-<h1 class="text-center my-4">Edit Category</h1>
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #fff9f4;
+    }
 
-<div class="d-flex justify-content-center card">
-    <form asp-action="Edit" method="post" class=" p-4 shadow rounded bg-light">
-        <input type="hidden" asp-for="Id" />
-        <div class="mb-3">
-            <label asp-for="Type" class="form-label fw-bold"></label>
-            <input asp-for="Type" class="form-control border-primary" placeholder="Enter new pet type" />
-            <span asp-validation-for="Type" class="text-danger small"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="Image" class="form-label fw-bold"></label>
-            <input asp-for="Image" class="form-control border-primary" placeholder="Enter new image url" />
-            <span asp-validation-for="Image" class="text-danger small"></span>
-        </div>
-        <div class="d-flex justify-content-between">
-            <a asp-action="Index" class="btn btn-secondary w-45">Cancel</a>
-            <button type="submit" class="btn btn-primary w-45">Save</button>
-        </div>
-    </form>
+    h1 {
+        color: hsl(30, 10%, 20%);
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        max-width: 900px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+        color: hsl(30, 10%, 45%);
+    }
+
+    .form-control {
+        padding: 12px;
+        border: 1px solid #e6ccb4;
+        border-radius: 8px;
+        background-color: #fff9f4;
+        transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: hsl(28, 54%, 44%);
+        box-shadow: 0 0 6px rgba(162, 107, 61, 0.5);
+    }
+
+    .btn-primary {
+        background-color: hsl(28, 54%, 44%);
+        border: none;
+        color: white;
+        padding: 12px;
+        border-radius: 8px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        font-weight: bold;
+    }
+
+    .btn-primary:hover {
+        background-color: hsl(28, 54%, 39%);
+        transform: translateY(-2px);
+    }
+
+    img {
+        border-radius: 8px;
+        max-width: 200px;
+        max-height: 200px;
+        object-fit: cover;
+        background-color: #f0e4d7;
+    }
+
+    .d-flex {
+        gap: 20px;
+    }
+</style>
+
+<h1 class="text-center">Edit Pet Type</h1>
+<div class="card">
+    <!-- Picture Section -->
+    <div class="d-flex flex-column align-items-center">
+        <img src="@Model.Image" alt="@Model.Type">
+    </div>
+
+    <!-- Form Section -->
+    <div style="flex: 1;">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group mb-3">
+                <label asp-for="Type">Pet Type</label>
+                <input asp-for="Type" class="form-control" placeholder="Enter pet type" />
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Image">Image URL</label>
+                <input asp-for="Image" class="form-control" placeholder="Enter image URL" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+            </div>
+        </form>
+    </div>
 </div>

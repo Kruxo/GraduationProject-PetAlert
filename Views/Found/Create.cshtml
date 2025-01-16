@@ -75,7 +75,7 @@
     }
 
     .btn:hover {
-        background-color: #854d20;
+        background-color: #6f3c1a;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
@@ -90,19 +90,19 @@
 </style>
 
 <div class="form-container">
-    <h1 class="form-title">Create New Report</h1>
-    <p class="form-description">Fill out the details about the found pet</p>
+    <h1 class="form-title">Create Found Pet Report</h1>
+    <p class="form-description">Please fill in the details of the pet you found</p>
     <form asp-action="Create" method="post">
         <div class="form-group">
             <label asp-for="FoundPet.Name" class="form-label">Pet Name</label>
-            <input asp-for="FoundPet.Name" class="form-control" />
+            <input asp-for="FoundPet.Name" class="form-control" placeholder="Enter pet's name (if known)" />
             <span asp-validation-for="FoundPet.Name" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="FoundPet.PetTypeId" class="form-label">Animal Type</label>
             <select asp-for="FoundPet.PetTypeId" class="form-control">
-                <option value="">Select animal type</option>
+                <option value="">Select an animal type</option>
                 @foreach (var petType in Model.PetTypes)
                 {
                     <option value="@petType.Id">@petType.Type</option>
@@ -114,25 +114,25 @@
         <div class="form-group">
             <label asp-for="FoundPet.Description" class="form-label">Description</label>
             <textarea asp-for="FoundPet.Description" class="form-control" rows="3"
-                placeholder="Provide details about the pet (color, breed, distinguishing features, etc.)"></textarea>
+                placeholder="Add details about the pet (color, size, etc.)"></textarea>
             <span asp-validation-for="FoundPet.Description" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="FoundPet.Longitude" class="form-label">Longitude</label>
-            <input asp-for="FoundPet.Longitude" class="form-control" placeholder="Enter longitude or click on map" />
-            <span asp-validation-for="FoundPet.Longitude" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
             <label asp-for="FoundPet.Latitude" class="form-label">Latitude</label>
-            <input asp-for="FoundPet.Latitude" class="form-control" placeholder="Enter latitude or click on map" />
+            <input asp-for="FoundPet.Latitude" class="form-control" placeholder="Enter latitude (if available)" />
             <span asp-validation-for="FoundPet.Latitude" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="FoundPet.Image" class="form-label">Image</label>
-            <input asp-for="FoundPet.Image" class="form-control" placeholder="Enter an Image-URL" />
+            <label asp-for="FoundPet.Longitude" class="form-label">Longitude</label>
+            <input asp-for="FoundPet.Longitude" class="form-control" placeholder="Enter longitude (if available)" />
+            <span asp-validation-for="FoundPet.Longitude" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="FoundPet.Image" class="form-label">Image URL</label>
+            <input asp-for="FoundPet.Image" class="form-control" placeholder="Enter image URL or upload later" />
             <span asp-validation-for="FoundPet.Image" class="text-danger"></span>
         </div>
 
