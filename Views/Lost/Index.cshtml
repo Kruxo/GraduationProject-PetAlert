@@ -135,7 +135,7 @@
                             {
                                 <div class="d-flex gap-2">
                                     <a asp-action="Edit" asp-route-id="@lostPet.Id" class="btn btn-warning flex-fill">Edit</a>
-                                    <a href="@Url.Action("Delete", "Found", new { id = lostPet.Id })"
+                                    <a href="@Url.Action("Delete", "Lost", new { id = lostPet.Id })"
                                         class="btn btn-danger flex-fill">Delete</a>
                                 </div>
                             }
