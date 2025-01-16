@@ -131,7 +131,8 @@
 
         <div class="mb-3">
             <label class="form-label">Search Location</label>
-            <input type="text" id="searchBox" class="form-control mb-2" placeholder="Type an address and press Enter..." />
+            <input type="text" id="searchBox" class="form-control mb-2"
+                placeholder="Type an address and press Enter..." />
         </div>
 
         <div class="mb-3">
@@ -140,18 +141,12 @@
         </div>
 
         <div class="mb-3">
-            <label for="Latitude" class="form-label">Latitude</label>
-            <input asp-for="LostPet.Latitude" class="form-control" id="Latitude" readonly />
-            <span asp-validation-for="LostPet.Latitude" class="text-danger"></span>
+            <span asp-validation-for="LostPet.Latitude" class="text-danger" id="Latitude"></span>
+            <span id="latDisplay" style="margin-top: 5px; ">Latitude: </span>
+            <span asp-validation-for="LostPet.Longitude" class="text-danger" id="Longitude"></span>
+            <span id="lngDisplay" style=" margin-top: 5px; ">Longitude: </span>
         </div>
 
-        <div class="mb-3">
-            <label for="Longitude" class="form-label">Longitude</label>
-            <input asp-for="LostPet.Longitude" class="form-control" id="Longitude" readonly />
-            <span asp-validation-for="LostPet.Longitude" class="text-danger"></span>
-        </div>
-
-        
         <div class="form-group">
             <label asp-for="LostPet.Image" class="form-label">Image</label>
             <input asp-for="LostPet.Image" class="form-control" placeholder="Enter an Image-URL" />
@@ -167,72 +162,75 @@
 
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Initialize the map centered on Stockholm
-    const map = L.map('map').setView([59.3293, 18.0686], 10);
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize the map centered on Stockholm
+        const map = L.map('map').setView([59.3293, 18.0686], 10);
 
-    // Add OpenStreetMap tiles
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-    }).addTo(map);
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+        }).addTo(map);
 
-    let marker = null; // Store marker reference
+        let marker = null; // Store marker reference
+        // Function to update latitude and longitude fields and spans
+        function updateLatLng(lat, lng) {
+            document.getElementById('Latitude').value = lat;
+            document.getElementById('Longitude').value = lng;
 
-    // Function to update latitude and longitude fields
-    function updateLatLng(lat, lng) {
-        document.getElementById('Latitude').value = lat;
-        document.getElementById('Longitude').value = lng;
-    }
-
-    // Function to place a marker
-    function placeMarker(lat, lng) {
-        if (marker) {
-            map.removeLayer(marker); // Remove previous marker
+            // Update the span elements
+            document.getElementById('latDisplay').textContent = `Latitude: ${lat}`;
+            document.getElementById('lngDisplay').textContent = `Longitude: ${lng}`;
         }
-        marker = L.marker([lat, lng], { draggable: true }).addTo(map);
 
-        // Update lat/lng when marker is dragged
-        marker.on('dragend', function () {
-            const newLatLng = marker.getLatLng();
-            updateLatLng(newLatLng.lat, newLatLng.lng);
+
+        // Function to place a marker
+        function placeMarker(lat, lng) {
+            if (marker) {
+                map.removeLayer(marker); // Remove previous marker
+            }
+            marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+
+            // Update lat/lng when marker is dragged
+            marker.on('dragend', function () {
+                const newLatLng = marker.getLatLng();
+                updateLatLng(newLatLng.lat, newLatLng.lng);
+            });
+
+            // Update the input fields immediately
+            updateLatLng(lat, lng);
+        }
+
+        // Click on the map to place marker
+        map.on('click', function (e) {
+            placeMarker(e.latlng.lat, e.latlng.lng);
         });
 
-        // Update the input fields immediately
-        updateLatLng(lat, lng);
-    }
+        // Search box functionality
+        const searchBox = document.getElementById('searchBox');
 
-    // Click on the map to place marker
-    map.on('click', function (e) {
-        placeMarker(e.latlng.lat, e.latlng.lng);
+        searchBox.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // Stop form from submitting
+
+                const query = searchBox.value;
+
+                // Use OpenStreetMap's Nominatim API for geocoding
+                fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.length > 0) {
+                            const lat = parseFloat(data[0].lat);
+                            const lng = parseFloat(data[0].lon);
+
+                            // Move map and place marker
+                            map.setView([lat, lng], 14);
+                            placeMarker(lat, lng);
+                        } else {
+                            alert("Location not found. Try a different address.");
+                        }
+                    })
+                    .catch(error => console.error("Error fetching location:", error));
+            }
+        });
     });
-
-    // Search box functionality
-    const searchBox = document.getElementById('searchBox');
-
-    searchBox.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') {
-            e.preventDefault(); // Stop form from submitting
-
-            const query = searchBox.value;
-
-            // Use OpenStreetMap's Nominatim API for geocoding
-            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.length > 0) {
-                        const lat = parseFloat(data[0].lat);
-                        const lng = parseFloat(data[0].lon);
-
-                        // Move map and place marker
-                        map.setView([lat, lng], 14);
-                        placeMarker(lat, lng);
-                    } else {
-                        alert("Location not found. Try a different address.");
-                    }
-                })
-                .catch(error => console.error("Error fetching location:", error));
-        }
-    });
-});
 </script>
-

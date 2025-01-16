@@ -10,81 +10,84 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/GraduationProject.styles.css" asp-append-version="true" />
 
-  
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
 
 
 </head>
 
 <body>
     <div class="wrapper">
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PetAlert</a>
-                <button class="navbar-toggler brown-text" type="button" data-bs-toggle="collapse"
-                    data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav d-flex justify-content-start">
-                        @* <li class="nav-item">
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
+                <div class="container-fluid">
+                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PetAlert</a>
+                    <button class="navbar-toggler brown-text" type="button" data-bs-toggle="collapse"
+                        data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                        <ul class="navbar-nav d-flex justify-content-start">
+                            @* <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home"
                                 asp-action="Privacy">Privacy</a>
                         </li> *@
-                    </ul>
-                    <ul class="navbar-nav d-flex justify-content-end">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Lost" asp-action="Index">Report
-                                Lost Pet</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Lost" asp-action="Create">
-                                Create Lost Pet</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Found" asp-action="Index">Report
-                                Found Pet</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Found" asp-action="Create">
-                                Create Found Pet</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="PetType" asp-action="Index">
-                                Pet Types</a>
-                        </li>
+                        </ul>
+                        <ul class="navbar-nav d-flex justify-content-end">
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Lost"
+                                    asp-action="Index">Report
+                                    Lost Pet</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Lost" asp-action="Create">
+                                    Create Lost Pet</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Found"
+                                    asp-action="Index">Report
+                                    Found Pet</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Found" asp-action="Create">
+                                    Create Found Pet</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="PetType" asp-action="Index">
+                                    Pet Types</a>
+                            </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Sign in</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout">Log out</a>
-                        </li>
-                    </ul>
-                    </ul>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Sign in</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Identity"
+                                    asp-page="/Account/Register">Register</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout">Log out</a>
+                            </li>
+                        </ul>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
-    </header>
-    <div>
-        <main role="main">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer >
-        @* class="border-top footer text-muted" *@
-        <div class="container">
-            &copy; 2025 - GraduationProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </nav>
+        </header>
+        <div>
+            <main role="main">
+                @RenderBody()
+            </main>
         </div>
-    </footer>
+
+        <footer>
+            @* class="border-top footer text-muted" *@
+            <div class="container">
+                &copy; 2025 - GraduationProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+        </footer>
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
