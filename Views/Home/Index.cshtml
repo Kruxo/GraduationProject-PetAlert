@@ -1,4 +1,6 @@
-﻿<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+﻿@model FoundLostIndexVm
+
+<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
 @{
     ViewData["Title"] = "Home Page";
@@ -6,7 +8,7 @@
 
 
 <body>
-    <header class="headerclass">
+    <header class="container-fluid headerclass p-5">
         <h1 class="brown-text"><strong>Help Find Lost Pets</strong></h1>
         <p class="dark-brown-text">Together we can reunite pets with their families. View the map or sign up to report a
             lost or found pet.
@@ -17,37 +19,112 @@
     </header>
 
 
-    <div class="map">
-        <div class="card p-5">
-            Map
+    <div class="container-fluid p-4">
+
+
+        @* map *@
+        <div id="map-container" style=" display: flex; justify-content: center;">
+            <div id="map" style="
+        height: 60vh; /* Height is responsive to viewport */
+        width: 90%;
+        max-width: 1200px; /* Prevents map from becoming too wide */
+        border-radius: 15px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        border: 2px solid #ccc;
+        @* margin-bottom: 20px; /* Prevent overlap with footer */ *@
+        overflow: hidden;">
+            </div>
         </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const map = L.map('map').setView([59.3293, 18.0686], 10);
+
+                // Add OpenStreetMap tiles
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors',
+                }).addTo(map);
+
+                // Define a custom icon
+                const customIcon = L.icon({
+                    iconUrl: 'https://static-00.iconduck.com/assets.00/fish-icon-1982x2048-xxayvvtg.png', // Path to your custom icon
+                    iconSize: [32, 32], // Size of the icon
+                    iconAnchor: [16, 32], // Anchor point of the icon (center bottom)
+                    popupAnchor: [0, -32] // Point where the popup opens relative to the icon
+                });
+
+                // Markers from the server
+                const markers = @Html.Raw(Json.Serialize(ViewBag.Markers));
+                markers.forEach(marker => {
+                    L.marker([marker.latitude, marker.longitude], { icon: customIcon })
+                        .addTo(map)
+                        .bindPopup(`
+                      <div>
+                        <strong>Name:</strong> ${marker.name}<br>
+                        <strong>Description:</strong> ${marker.description}<br>
+                        <strong>Pet Type:</strong> ${marker.petType}<br>
+                        <img src="${marker.image}" alt="${marker.name}" style="width:100px;height:auto;margin-top:10px;">
+                    </div>
+
+                `);
+                });
+            });
+        </script>
     </div>
 
+    <div class="container-fluid reportlist p-4" style="display: flex; justify-content: center;">
+        <div style="display: flex; justify-content: center; width:90%; max-width: 1200px;">
+        <div class="card col-6 me-1 ms-1" >
+            <table class="table">
+                
+                <thead>
+                    <tr>
+                        <th style="font-size: xx-large;">Lost pets</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                
+                  
+                      @foreach (var lostPet in Model.LostPets){
+                    <tr>
+                        <th><img src="@lostPet.Image" class="image-fit"></th>
+                        <td>@lostPet.Description</td>
+                    </tr>
+                    }
+                    
+                </tbody>
 
-    <div class="reportlist">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Bild</th>
-                    <th>Beskrivning</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>Bild1</th>
-                    <td>Försvunnen hund</th>
-                </tr>
-                <tr>
-                    <th>Bild2</th>
-                    <td>Upphittad katt</th>
-                </tr>
-                <tr>
-                    <th>Bild3</th>
-                    <td>Borttappad häst!</th>
-                </tr>
-            </tbody>
+            </table>
+        </div>
+        
+         <div class="card col-6 ms-1 me-1" >
+            <table class="table">
+                   <thead>
+                    <tr>
+                        <th style="font-size: xx-large;">Found pets</th>
+                        <th></th>
+                    </tr>
+                </thead>    
+                <tbody>
+                
+                    @foreach (var foundPet in Model.FoundPets){
+                      
+                    <tr>
+                        <th>
+                            <div>
+                            <img src="@foundPet.Image" class="image-fit" alt="@foundPet.Image">
+                            </div>
+                        </th>
+                        <td>@foundPet.Description</td>
+                    </tr>
+                    }
+                    
+                    
+                </tbody>
 
-        </table>
-
+            </table>
+        </div>
+</div>
     </div>
 </body>
