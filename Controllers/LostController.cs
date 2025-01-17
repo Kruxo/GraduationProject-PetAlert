@@ -3,28 +3,36 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using GraduationProject.Models;
 using GraduationProject.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace GraduationProject.Controllers;
 
 public class LostController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly UserManager<IdentityUser> _userManager;
 
-    public LostController(ApplicationDbContext context)
+    public LostController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
     public async Task<IActionResult> Index()
     {
+        var lostPets = await _context.LostPets
+.Include(f => f.User)
+.ToListAsync();
+
         var vm = new LostIndexVm
         {
-            LostPets = await _context.LostPets.ToListAsync(),
+            LostPets = lostPets,
             PetTypes = await _context.PetTypes.ToListAsync()
         };
         return View(vm);
     }
 
+    [Authorize]
     public IActionResult Create()
     {
         var vm = new LostCreateVm
@@ -37,11 +45,13 @@ public class LostController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    //[Authorize(Roles = RoleConstants.Administrator)]
     public async Task<IActionResult> CreateAsync(LostCreateVm createVm)
     {
         if (ModelState.IsValid)
         {
+            var userId = _userManager.GetUserId(User); // Get the logged-in user's Id
+            createVm.LostPet.UserId = userId; // Set the UserId field
+
             _context.LostPets.Add(createVm.LostPet);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -51,7 +61,7 @@ public class LostController : Controller
         return View(createVm);
     }
 
-    //[Authorize(Roles = RoleConstants.Administrator)]
+    [Authorize]
     public async Task<IActionResult> EditAsync(int? id)
     {
         if (id == null)
@@ -77,7 +87,6 @@ public class LostController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    //[Authorize(Roles = RoleConstants.Administrator)]
     public async Task<IActionResult> Edit(LostEditVm lostVm)
     {
         var lostPet = lostVm.LostPet;
@@ -88,7 +97,8 @@ public class LostController : Controller
             {
                 return NotFound();
             }
-
+            var userId = _userManager.GetUserId(User); // Get the logged-in user's Id
+            lostVm.LostPet.UserId = userId; // Set the UserId field
             _context.Update(lostPet);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -96,7 +106,7 @@ public class LostController : Controller
         return View(lostVm);
     }
 
-    //[Authorize(Roles = RoleConstants.Administrator)]
+    [Authorize]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -122,7 +132,6 @@ public class LostController : Controller
 
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    //[Authorize(Roles = RoleConstants.Administrator)]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var lostPet = await _context.LostPets.FindAsync(id);

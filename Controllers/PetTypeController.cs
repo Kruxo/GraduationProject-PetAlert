@@ -5,7 +5,7 @@ using GraduationProject.Models;
 using GraduationProject.ViewModels;
 
 namespace GraduationProject.Controllers;
-
+[Authorize(Roles = RoleConstants.Administrator)] //With this only Admin User can access this page
 public class PetTypeController : Controller
 {
     private readonly ApplicationDbContext _context;

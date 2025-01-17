@@ -15,31 +15,31 @@ public class HomeController : Controller
         _context = context;
     }
 
-   
- public async Task<IActionResult> Index()
-{
-    
-    var list= new FoundLostIndexVm {
-        LostPets = await _context.LostPets.ToListAsync(),
-        FoundPets = await _context.FoundPets.ToListAsync(),
-    };
+    public async Task<IActionResult> Index()
+    {
 
-    var markers = await _context.FoundPets
-        .Include(f => f.PetType) // Include related PetType
-        .Select(f => new
+        var list = new FoundLostIndexVm
         {
-            f.Name,
-            f.Description,
-            f.Image,
-            f.Latitude,
-            f.Longitude,
-            PetType = f.PetType != null ? f.PetType.Type : "Unknown", // Include PetType if available
-        })
-        .ToListAsync();
+            LostPets = await _context.LostPets.ToListAsync(),
+            FoundPets = await _context.FoundPets.ToListAsync(),
+        };
 
-    ViewBag.Markers = markers;
-    return View(list);
-}
+        var markers = await _context.FoundPets
+            .Include(f => f.PetType) // Include related PetType
+            .Select(f => new
+            {
+                f.Name,
+                f.Description,
+                f.Image,
+                f.Latitude,
+                f.Longitude,
+                PetType = f.PetType != null ? f.PetType.Type : "Unknown", // Include PetType if available
+            })
+            .ToListAsync();
+
+        ViewBag.Markers = markers;
+        return View(list);
+    }
 
 
     public async Task<IActionResult> Privacy()
@@ -57,12 +57,12 @@ public class HomeController : Controller
         })
         .ToListAsync();
 
-    ViewBag.Markers = markers;
+        ViewBag.Markers = markers;
         return View();
 
 
     }
 
-    
+
 
 }

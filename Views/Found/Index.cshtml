@@ -1,8 +1,14 @@
+@using Microsoft.AspNetCore.Identity
 @model FoundIndexVm
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject UserService UserService
+@{
+    var isAdmin = await UserService.IsCurrentUserAdministratorAsync();
+}
 
 <style>
     body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background-color: #fff9f4;
     }
 
@@ -93,7 +99,6 @@
 
 <div class="container">
     <h1>Found Pets</h1>
-
     @if (!Model.FoundPets.Any())
     {
         <div class="alert">
@@ -110,6 +115,8 @@
                     <div class="card-body">
                         <h5 class="card-title">@foundPet.Name</h5>
                         <p class="card-text">@foundPet.Description</p>
+                        <p class="card-text">@foundPet.User?.PhoneNumber</p>
+                        <p class="card-text">@foundPet.User?.UserName</p>
                         <hr>
                         <ul class="list-unstyled">
                             <li class="d-flex justify-content-between">
@@ -117,11 +124,18 @@
                                 <span>@(Model.PetTypes.FirstOrDefault(t => t.Id == foundPet.PetTypeId)?.Type)</span>
                             </li>
                         </ul>
-                        <div class="d-flex gap-2">
-                            <a asp-action="Edit" asp-route-id="@foundPet.Id" class="btn btn-warning flex-fill">Edit</a>
-                            <a href="@Url.Action("Delete", "Found", new { id = foundPet.Id })"
-                                class="btn btn-danger flex-fill">Delete</a>
-                        </div>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            var currentUserId = UserManager.GetUserId(User); //Getting current userId
+                            if (foundPet.UserId == currentUserId || isAdmin) //Checking if current userId matches with the owner of the reported pet
+                            {
+                                <div class="d-flex gap-2">
+                                    <a asp-action="Edit" asp-route-id="@foundPet.Id" class="btn btn-warning flex-fill">Edit</a>
+                                    <a href="@Url.Action("Delete", "Found", new { id = foundPet.Id })"
+                                        class="btn btn-danger flex-fill">Delete</a>
+                                </div>
+                            }
+                        }
                     </div>
                 </div>
             }
