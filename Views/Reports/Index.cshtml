@@ -1,78 +1,38 @@
 @model FoundLostIndexVm
 @{
-    @* var LostPets = new LostPets
-          .Select(lp => new
-          {
-              Name = lp.Name,
-              Description = lp.Description,
-              Image = lp.Image,
-              Id = lp.Id
-          })
-          .ToListAsync();
-
-            var FoundPets = new
-          .Select(fp => new
-          {
-              Name = fp.Name,
-              Description = fp.Description,
-              Image = fp.Image,
-              Id = fp.Id
-          })
-          .ToListAsync();
-
-
-
-        var AllPets = LostPets.Concat(FoundPets).OrderByDescending(p => p.Id).ToList(); *@
-    @* var allPets = Model.LostPets.Concat(Model.FoundPets).OrderByDescending(p => p.Id).ToList(); *@
+    // Combine LostPets and FoundPets into a single list, including the Date and sorting by Date
+    var allPets = Model.LostPets
+    .Select(p => new { p.Id, p.Name, p.Description, p.Image, p.Date, ReportType = "Lost" })
+    .Concat(Model.FoundPets.Select(p => new { p.Id, p.Name, p.Description, p.Image, p.Date, ReportType = "Found" }))
+    .OrderByDescending(p => p.Date) // Sort by Date
+    .ToList();
 }
 
 <div class="container-fluid reportlist p-4" style="display: flex; justify-content: center;">
     <div style="display: flex; justify-content: center; width:90%; max-width: 1200px;">
-
-        <div class="col-6 me-1 ms-1">
-            <table class="table">
-                <ul class="list-unstyled">
-                    <p style="font-size: xx-large;">Lost pets </p>
-                    @foreach (var lostPet in Model.LostPets.OrderByDescending(p => p.Id))
-                    {
-                        <div class="card mb-1">
-                            <li class="row align-items-start">
-                                <div class="col-auto">
-                                    <img src="@lostPet.Image" class="image-fit rounded-left " alt="@lostPet.Image">
-                                </div>
-                                <div class="col">
-                                    <h5 class="card-title mt-3"><strong>@lostPet.Name</strong></h5>
-                                    <p class="card-text">@lostPet.Description</p>
-                                </div>
-                            </li>
-                        </div>
-                    }
-                </ul>
-
-            </table>
-        </div>
-
-        <div class="col-6 ms-1 me-1">
-            <div class="">
-                <ul class="list-unstyled">
-
-
-                    <p style="font-size: xx-large;">Found pets </p>
-                    @foreach (var foundPet in Model.FoundPets.OrderByDescending(p => p.Id).Take(3))
-                    {
-                        <div class="card mb-1">
-                            <li class="row align-items-start">
-                                <div class="col-auto">
-                                    <img src="@foundPet.Image" class="image-fit rounded-left " alt="@foundPet.Image">
-                                </div>
-                                <div class="col">
-                                    <h5 class="card-title mt-3"><strong>@foundPet.Name</strong></h5>
-                                    <p class="card-text">@foundPet.Description</p>
-                                </div>
-                            </li>
-                        </div>
-                    }
-                </ul>
-            </div>
+        <div class="col-12">
+            <ul class="list-unstyled">
+                <p style="font-size: xx-large;">Reported Pets</p>
+                @foreach (var pet in allPets)
+                {
+                    <div class="card mb-1">
+                        <li class="row align-items-start">
+                            <div class="col-auto">
+                                <img src="@pet.Image" class="image-fit rounded-left" alt="@pet.Image">
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title mt-3"><strong>@pet.Name</strong></h5>
+                                <p class="card-text">@pet.Description</p>
+                                <p class="card-text"><em>Report Category: @pet.ReportType</em></p>
+                                <!-- Indicate Lost or Found -->
+                                <p class="card-text"><small class="text-muted">Reported on:
+                                        @pet.Date.ToString("dd-MM-yyyy")</small></p>
+                                <!-- "dd-MMMM-yyyy" om man vill månaden skriven ut i bokstäver -->
+                            </div>
+                        </li>
+                    </div>
+                }
+            </ul>
         </div>
     </div>
+</div>
