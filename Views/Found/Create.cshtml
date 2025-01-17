@@ -3,79 +3,80 @@
 <style>
     body {
         background-color: #fff9f4;
-        margin: 0;
-        padding: 0;
     }
 
     .form-container {
         max-width: 600px;
         margin: 40px auto;
         background-color: #ffffff;
-        border-radius: 20px;
-        border: 2px solid #e6ccb4;
+        border-radius: 16px;
+        border: 1px solid #e6ccb4;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
         padding: 30px;
     }
 
     .form-title {
-        font-size: 26px;
+        font-size: 28px;
         font-weight: bold;
         text-align: center;
-        margin-bottom: 10px;
-        color: #333333;
+        margin-bottom: 15px;
+        color: hsl(30, 10%, 20%);
     }
 
     .form-description {
         text-align: center;
-        color: #777777;
-        font-size: 14px;
-        margin-bottom: 20px;
+        color: hsl(30, 10%, 40%);
+        font-size: 16px;
+        margin-bottom: 25px;
     }
 
     .form-group {
         margin-bottom: 20px;
     }
 
+    .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: hsl(30, 10%, 35%);
+    }
+
     .form-control {
         width: 100%;
         padding: 12px 15px;
         font-size: 16px;
-        border: 2px solid #e6ccb4;
+        border: 2px solid hsl(30, 20%, 85%);
         border-radius: 12px;
-        box-sizing: border-box;
-        background-color: #fff9f4;
+        background-color: #fffaf4;
         transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
     .form-control:focus {
         outline: none;
-        border-color: #a26b3d;
-        box-shadow: 0 0 8px rgba(162, 107, 61, 0.5);
-        background-color: #ffffff;
+        border-color: hsl(30, 30%, 65%);
+        box-shadow: 0 0 8px rgba(162, 107, 61, 0.4);
     }
 
-    .form-label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: bold;
-        color: #555555;
+    .form-control::placeholder {
+        color: hsl(30, 10%, 65%);
     }
 
     .btn {
-        background-color: #854d20;
+        display: block;
+        width: 100%;
+        background-color: hsl(30, 60%, 35%);
         color: white;
         border: none;
-        padding: 12px 20px;
+        padding: 14px 20px;
         font-size: 16px;
-        cursor: pointer;
         border-radius: 12px;
-        text-align: center;
-        transition: background-color 0.3s ease, box-shadow 0.3s ease;
-        width: 100%;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     .btn:hover {
-        background-color: #6f3c1a;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        background-color: hsl(30, 60%, 30%);
+        transform: translateY(-2px);
     }
 
     select.form-control {
@@ -86,22 +87,32 @@
     textarea.form-control {
         resize: none;
     }
+
+    .text-danger {
+        font-size: 14px;
+        color: hsl(0, 70%, 50%);
+    }
+
+    .dropdown-menu {
+    max-height: 250px;
+    overflow-y: auto;
+}
 </style>
 
 <div class="form-container">
-    <h1 class="form-title">Create Found Pet Report</h1>
-    <p class="form-description">Please fill in the details of the pet you found</p>
+    <h1 class="form-title">Create Lost Pet Report</h1>
+    <p class="form-description">Fill out the details about the lost pet</p>
     <form asp-action="Create" method="post">
         <div class="form-group">
             <label asp-for="FoundPet.Name" class="form-label">Pet Name</label>
-            <input asp-for="FoundPet.Name" class="form-control" placeholder="Enter pet's name (if known)" />
+            <input asp-for="FoundPet.Name" class="form-control" placeholder="Enter pet name" />
             <span asp-validation-for="FoundPet.Name" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="FoundPet.PetTypeId" class="form-label">Animal Type</label>
             <select asp-for="FoundPet.PetTypeId" class="form-control">
-                <option value="">Select an animal type</option>
+                <option value="">Select animal type</option>
                 @foreach (var petType in Model.PetTypes)
                 {
                     <option value="@petType.Id">@petType.Type</option>
@@ -113,28 +124,140 @@
         <div class="form-group">
             <label asp-for="FoundPet.Description" class="form-label">Description</label>
             <textarea asp-for="FoundPet.Description" class="form-control" rows="3"
-                placeholder="Add details about the pet (color, size, etc.)"></textarea>
+                placeholder="Provide details about the pet (color, breed, etc.)"></textarea>
             <span asp-validation-for="FoundPet.Description" class="text-danger"></span>
         </div>
+       
+        <div class="form-group position-relative">
+            <label class="form-label">Search Location</label>
+            <input type="text" id="searchBox" class="form-control" placeholder="Type an address..." autocomplete="off">
 
-        <div class="form-group">
-            <label asp-for="FoundPet.Latitude" class="form-label">Latitude</label>
-            <input asp-for="FoundPet.Latitude" class="form-control" placeholder="Enter latitude (if available)" />
-            <span asp-validation-for="FoundPet.Latitude" class="text-danger"></span>
+            <!-- Dropdown list container -->
+            <div class="dropdown-menu w-100 shadow-sm mt-1" id="autocomplete-list"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Select Location on Map</label>
+            <div id="map" style="height: 400px; width: 100%; border: 1px solid #ccc; border-radius: 10px;"></div>
+        </div>
+
+        <div class="mb-3">
+            <span asp-validation-for="FoundPet.Latitude" class="text-danger" id="Latitude"></span>
+            <span id="latDisplay" style="margin-top: 5px; ">Latitude: </span>
+            <span asp-validation-for="FoundPet.Longitude" class="text-danger" id="Longitude"></span>
+            <span id="lngDisplay" style=" margin-top: 5px; ">Longitude: </span>
         </div>
 
         <div class="form-group">
-            <label asp-for="FoundPet.Longitude" class="form-label">Longitude</label>
-            <input asp-for="FoundPet.Longitude" class="form-control" placeholder="Enter longitude (if available)" />
-            <span asp-validation-for="FoundPet.Longitude" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="FoundPet.Image" class="form-label">Image URL</label>
-            <input asp-for="FoundPet.Image" class="form-control" placeholder="Enter image URL or upload later" />
+            <label asp-for="FoundPet.Image" class="form-label">Image</label>
+            <input asp-for="FoundPet.Image" class="form-control" placeholder="Enter an image URL" />
             <span asp-validation-for="FoundPet.Image" class="text-danger"></span>
         </div>
 
         <button type="submit" class="btn">Submit Report</button>
     </form>
 </div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Initialize the map centered on Stockholm
+        const map = L.map('map').setView([59.3293, 18.0686], 10);
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+        }).addTo(map);
+
+        let marker = null; // Store marker reference
+        // Function to update latitude and longitude fields and spans
+        function updateLatLng(lat, lng) {
+            document.getElementById('Latitude').value = lat;
+            document.getElementById('Longitude').value = lng;
+
+            // Update the span elements
+            document.getElementById('latDisplay').textContent = `Latitude: ${lat}`;
+            document.getElementById('lngDisplay').textContent = `Longitude: ${lng}`;
+        }
+
+        // Function to place a marker
+        function placeMarker(lat, lng) {
+            if (marker) {
+                map.removeLayer(marker); // Remove previous marker
+            }
+            marker = L.marker([lat, lng], { draggable: true }).addTo(map);
+
+            // Update lat/lng when marker is dragged
+            marker.on('dragend', function () {
+                const newLatLng = marker.getLatLng();
+                updateLatLng(newLatLng.lat, newLatLng.lng);
+            });
+
+            // Update the input fields immediately
+            updateLatLng(lat, lng);
+        }
+
+        // Click on the map to place marker
+        map.on('click', function (e) {
+            placeMarker(e.latlng.lat, e.latlng.lng);
+        });
+
+         // Search box functionality
+        const searchBox = document.getElementById('searchBox');
+        const dropdown = document.getElementById('autocomplete-list');
+
+        searchBox.addEventListener('input', function () {
+            const query = searchBox.value.trim();
+
+            if (query.length < 3) {
+                dropdown.innerHTML = ""; // Clear suggestions if input is too short
+                dropdown.classList.remove("show"); // Hide dropdown
+                return;
+            }
+
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&countrycodes=SE`)
+                .then(response => response.json())
+                .then(data => {
+                    dropdown.innerHTML = ""; // Clear previous suggestions
+                    if (data.length > 0) {
+                        dropdown.classList.add("show"); // Show dropdown
+                        data.slice(0, 5).forEach(place => {
+                            const item = document.createElement('a');
+                            item.className = "dropdown-item";
+                            item.textContent = place.display_name;
+                            item.href = "#"; // Prevent page reload
+
+                            // Click to select an address
+                            item.addEventListener('click', function (e) {
+                                e.preventDefault();
+                                searchBox.value = place.display_name;
+                                dropdown.innerHTML = ""; // Clear suggestions
+                                dropdown.classList.remove("show"); // Hide dropdown
+
+                                const lat = parseFloat(place.lat);
+                                const lng = parseFloat(place.lon);
+
+                                map.setView([lat, lng], 14);
+                                placeMarker(lat, lng);
+                            });
+
+                            dropdown.appendChild(item);
+                        });
+                    } else {
+                        dropdown.classList.remove("show"); // Hide if no results
+                    }
+                })
+                .catch(error => console.error("Error fetching location:", error));
+        });
+
+        // Hide dropdown when clicking outside
+        document.addEventListener('click', function (event) {
+            if (!searchBox.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.innerHTML = "";
+                dropdown.classList.remove("show"); // Hide dropdown
+            }
+        });
+
+
+    });
+</script>

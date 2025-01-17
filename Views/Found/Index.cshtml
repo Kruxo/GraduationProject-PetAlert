@@ -7,6 +7,9 @@
     var isAdmin = await UserService.IsCurrentUserAdministratorAsync();
 }
 
+
+
+
 <style>
     body {
         background-color: #fff9f4;
@@ -117,6 +120,12 @@
                         <p class="card-text">@foundPet.Description</p>
                         <p class="card-text">@foundPet.User?.PhoneNumber</p>
                         <p class="card-text">@foundPet.User?.UserName</p>
+                        @{
+                            var stockholmTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+                            var stockholmDate = TimeZoneInfo.ConvertTimeFromUtc(foundPet.Date, stockholmTimeZone);
+                        }
+                        <p class="card-text"> @stockholmDate.ToString("dd-MM-yyyy HH:mm")</p>
+
                         <hr>
                         <ul class="list-unstyled">
                             <li class="d-flex justify-content-between">

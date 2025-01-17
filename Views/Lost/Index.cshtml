@@ -117,6 +117,11 @@
                         <p class="card-text">@lostPet.Description</p>
                         <p class="card-text">@lostPet.User?.PhoneNumber</p>
                         <p class="card-text">@lostPet.User?.UserName</p>
+                        @{
+                            var stockholmTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+                            var stockholmDate = TimeZoneInfo.ConvertTimeFromUtc(lostPet.Date, stockholmTimeZone);
+                        }
+                        <p class="card-text"> @stockholmDate.ToString("dd-MM-yyyy HH:mm")</p>
                         <hr>
                         <ul class="list-unstyled">
                             <li class="d-flex justify-content-between">
