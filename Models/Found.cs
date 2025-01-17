@@ -12,6 +12,7 @@ public class Found
     public string Image { get; set; } = "";
     public string Latitude { get; set; } = "";
     public string Longitude { get; set; } = "";
+    public DateTime Date { get; set; } = DateTime.UtcNow;
 
     [ForeignKey("UserId")]
     public virtual IdentityUser? User { get; set; }

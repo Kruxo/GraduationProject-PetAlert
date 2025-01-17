@@ -1,5 +1,94 @@
 @model PetTypeIndexVm
 
+<style>
+    body {
+        background-color: #fff9f4;
+    }
+
+    h1 {
+        color: hsl(30, 10%, 20%);
+        font-size: 2rem;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .card {
+        width: 18rem;
+        background-color: #ffffff;
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        margin: 5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card img {
+        border-radius: 16px 16px 0 0;
+        max-height: 200px;
+        object-fit: cover;
+    }
+
+    .card-title {
+        color: hsl(30, 10%, 20%);
+        font-size: 1.2rem;
+        font-weight: bold;
+        text-align: center;
+        margin: 10px 0;
+    }
+
+    .card-text {
+        font-size: 0.9rem;
+        color: hsl(30, 10%, 40%);
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .btn-warning {
+        background-color: hsl(45, 90%, 50%);
+        border: none;
+        color: white;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-warning:hover {
+        background-color: hsl(45, 90%, 45%);
+        transform: translateY(-2px);
+    }
+
+    .btn-danger {
+        background-color: hsl(0, 70%, 50%);
+        border: none;
+        color: white;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-danger:hover {
+        background-color: hsl(0, 70%, 45%);
+        transform: translateY(-2px);
+    }
+
+    .alert {
+        background-color: hsl(30, 20%, 90%);
+        color: hsl(30, 10%, 25%);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+        font-size: 1rem;
+        font-weight: bold;
+    }
+</style>
+
 <div class="container text-center my-4">
     <div class="my-4">
         <a asp-action="Create" class="btn btn-success">
@@ -11,11 +100,10 @@
         @foreach (var petType in Model.PetTypes)
         {
             <div class="card text-center" style="width: 18rem;">
-                <img src="@petType.Image" alt="@petType.Type" class="card-img-top"
-                    style="height: 180px; object-fit: cover;" />
+                <img src="@petType.Image" alt="@petType.Type" class="card-img-top" />
                 <div class="card-body">
                     <h5 class="card-title">@petType.Type</h5>
-                    <div class="d-flex justify-content-center gap-2">
+                    <div class="d-flex gap-2">
                         <a asp-action="Edit" asp-route-id="@petType.Id" class="btn btn-warning flex-fill">Edit</a>
                         <a asp-action="Delete" asp-route-id="@petType.Id" class="btn btn-danger flex-fill">Delete</a>
                     </div>
