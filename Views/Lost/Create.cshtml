@@ -94,9 +94,9 @@
     }
 
     .dropdown-menu {
-    max-height: 250px;
-    overflow-y: auto;
-}
+        max-height: 250px;
+        overflow-y: auto;
+    }
 </style>
 
 
@@ -134,7 +134,7 @@
                 placeholder="Provide details about the pet (color, breed, etc.)"></textarea>
             <span asp-validation-for="LostPet.Description" class="text-danger"></span>
         </div>
-       
+
         <div class="form-group position-relative">
             <label class="form-label">Search Location</label>
             <input type="text" id="searchBox" class="form-control" placeholder="Type an address..." autocomplete="off">
@@ -148,11 +148,11 @@
             <div id="map" style="height: 400px; width: 100%; border: 1px solid #ccc; border-radius: 10px;"></div>
         </div>
 
-        <div class="mb-3">
-            <span asp-validation-for="LostPet.Latitude" class="text-danger" id="Latitude"></span>
-            <span id="latDisplay" style="margin-top: 5px; ">Latitude: </span>
-            <span asp-validation-for="LostPet.Longitude" class="text-danger" id="Longitude"></span>
-            <span id="lngDisplay" style=" margin-top: 5px; ">Longitude: </span>
+        <div class="mb-3" style="display: flex; flex-direction: column;">
+            <span id="latDisplay" style="font-size: 12px;">Latitude: <span asp-validation-for="LostPet.Latitude"
+                    class="text-danger" id="Latitude" style="font-size: 12px;"></span></span>
+            <span id="lngDisplay" style="font-size: 12px;">Longitude: <span asp-validation-for="LostPet.Longitude"
+                    class="text-danger" id="Longitude" style="font-size: 12px;"></span></span>
         </div>
 
         <div class="form-group">
@@ -209,7 +209,7 @@
             placeMarker(e.latlng.lat, e.latlng.lng);
         });
 
-         // Search box functionality
+        // Search box functionality
         const searchBox = document.getElementById('searchBox');
         const dropdown = document.getElementById('autocomplete-list');
 

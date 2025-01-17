@@ -98,57 +98,56 @@
 </style>
 
 <div class="container">
-    <h1>Found Pets</h1>
+    <h1>Your reported lost pets</h1>
     @if (!Model.LostPets.Any())
     {
         <div class="alert">
             No found pets available.
         </div>
     }
-    else
+
+    @if (SignInManager.IsSignedIn(User))
     {
         <div class="d-flex flex-wrap justify-content-center">
             @foreach (var lostPet in Model.LostPets)
             {
-                <div class="card">
-                    <img src="@lostPet.Image" alt="@lostPet.Name" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title">@lostPet.Name</h5>
-                        <p class="card-text">@lostPet.Description</p>
-                        <p class="card-text">@lostPet.User?.PhoneNumber</p>
-                        <p class="card-text">@lostPet.User?.UserName</p>
-                        @{
-                            var stockholmTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
-                            var stockholmDate = TimeZoneInfo.ConvertTimeFromUtc(lostPet.Date, stockholmTimeZone);
-                        }
-                        <p class="card-text"> @stockholmDate.ToString("dd-MM-yyyy HH:mm")</p>
-                        <hr>
-                        <ul class="list-unstyled">
-                            <li class="d-flex justify-content-between">
-                                <strong>Pet Type:</strong>
-                                <span>@(Model.PetTypes.FirstOrDefault(t => t.Id == lostPet.PetTypeId)?.Type)</span>
-                            </li>
-                                                    <li class="d-flex justify-content-between">
-                            <strong>Chip ID:</strong>
-                            <span>@lostPet.ChipId</span>
-                        </li>
-                        </ul>
-                        @if (SignInManager.IsSignedIn(User))
-                        {
-                            var currentUserId = UserManager.GetUserId(User); //Getting current userId
-                            if (lostPet.UserId == currentUserId || isAdmin) //Checking if current userId matches with the owner of the reported pet
-                            {
-                                <div class="d-flex gap-2">
-                                    <a asp-action="Edit" asp-route-id="@lostPet.Id" class="btn btn-warning flex-fill">Edit</a>
-                                    <a href="@Url.Action("Delete", "Lost", new { id = lostPet.Id })"
-                                        class="btn btn-danger flex-fill">Delete</a>
-                                </div>
+                var currentUserId = UserManager.GetUserId(User); //Getting current userId
+                if (lostPet.UserId == currentUserId || isAdmin) //Checking if current userId matches with the owner of the card
+                {
+                    <div class="card">
+                        <img src="@lostPet.Image" alt="@lostPet.Name" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">@lostPet.Name</h5>
+                            <p class="card-text">@lostPet.Description</p>
+                            <p class="card-text">@lostPet.User?.PhoneNumber</p>
+                            <p class="card-text">@lostPet.User?.UserName</p>
+                            @{
+                                var stockholmTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+                                var stockholmDate = TimeZoneInfo.ConvertTimeFromUtc(lostPet.Date, stockholmTimeZone);
                             }
-                        }
+                            <p class="card-text"> @stockholmDate.ToString("dd-MM-yyyy HH:mm")</p>
+                            <hr>
+                            <ul class="list-unstyled">
+                                <li class="d-flex justify-content-between">
+                                    <strong>Pet Type:</strong>
+                                    <span>@(Model.PetTypes.FirstOrDefault(t => t.Id == lostPet.PetTypeId)?.Type)</span>
+                                </li>
+                                <li class="d-flex justify-content-between">
+                                    <strong>Chip ID:</strong>
+                                    <span>@lostPet.ChipId</span>
+                                </li>
+                            </ul>
+
+                            <div class="d-flex gap-2">
+                                <a asp-action="Edit" asp-route-id="@lostPet.Id" class="btn btn-warning flex-fill">Edit</a>
+                                <a href="@Url.Action("Delete", "Lost", new { id = lostPet.Id })"
+                                    class="btn btn-danger flex-fill">Delete</a>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                }
             }
         </div>
     }
-</div>
 
+</div>

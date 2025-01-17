@@ -15,75 +15,51 @@ public class HomeController : Controller
         _context = context;
     }
 
-   
- public async Task<IActionResult> Index()
-{
-    
-    var list= new FoundLostIndexVm {
-        LostPets = await _context.LostPets.ToListAsync(),
-        FoundPets = await _context.FoundPets.ToListAsync(),
-    };
-
-
-    var markers1 = await _context.LostPets
-        .Include(l => l.PetType)
-        .Select(l => new
-        {
-            l.Name,
-            l.Description,
-            l.Image,
-            l.Latitude,
-            l.Longitude,
-            PetType = l.PetType != null ? l.PetType.Type : "Unknown",
-        })
-        .ToListAsync();
-
-
-
-    var markers = await _context.FoundPets
-        .Include(f => f.PetType) // Include related PetType
-        .Select(f => new
-        {
-            f.Name,
-            f.Description,
-            f.Image,
-            f.Latitude,
-            f.Longitude,
-            PetType = f.PetType != null ? f.PetType.Type : "Unknown", // Include PetType if available
-        })
-        .ToListAsync();
-        
-        var combinedMarkers = markers1.Concat(markers).ToList();
- 
-        ViewBag.Markers = combinedMarkers;
-
-    
-    
-    return View(list);
-}
-
-
-    public async Task<IActionResult> Privacy()
+    public async Task<IActionResult> Index()
     {
-        var markers = await _context.FoundPets
-        .Include(f => f.PetType) // Include related PetType
-        .Select(f => new
+
+        var list = new FoundLostIndexVm
         {
-            f.Name,
-            f.Description,
-            f.Image,
-            f.Latitude,
-            f.Longitude,
-            PetType = f.PetType != null ? f.PetType.Type : "Unknown", // Include PetType if available
-        })
-        .ToListAsync();
+            LostPets = await _context.LostPets.ToListAsync(),
+            FoundPets = await _context.FoundPets.ToListAsync(),
+        };
 
-    ViewBag.Markers = markers;
-        return View();
+        var lostPetMarkers = await _context.LostPets
+     .Include(f => f.PetType) // Include related PetType
+     .Include(f => f.User)    // Include related User
+     .Select(f => new
+     {
+         f.Name,
+         f.Description,
+         f.Image,
+         f.Latitude,
+         f.Longitude,
+         PetType = f.PetType != null ? f.PetType.Type : "Unknown", // Include PetType if available
+         PhoneNumber = f.User != null ? f.User.PhoneNumber : "Not Provided", // Include User's PhoneNumber if available
+         ChipId = f.ChipId // Specific to Lost pets
+     })
+     .ToListAsync();
 
+        var foundPetMarkers = await _context.FoundPets
+            .Include(f => f.PetType)
+            .Include(f => f.User)
+            .Select(f => new
+            {
+                f.Name,
+                f.Description,
+                f.Image,
+                f.Latitude,
+                f.Longitude,
+                PetType = f.PetType != null ? f.PetType.Type : "Unknown",
+                PhoneNumber = f.User != null ? f.User.PhoneNumber : "Not Provided",
+                ChipId = (string?)null // Found pets do not have a ChipId, so set it as null
+            })
+            .ToListAsync();
 
+        var combinedMarkers = lostPetMarkers.Concat(foundPetMarkers).ToList();
+
+        ViewBag.Markers = combinedMarkers;
+        return View(list);
     }
-
-    
 
 }
