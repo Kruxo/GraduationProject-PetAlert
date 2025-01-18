@@ -1,11 +1,11 @@
 @model FoundLostIndexVm
 @{
-    // Combine LostPets and FoundPets into a single list, including the Date and sorting by Date
+    //Combines lost and found reports into a single list and sort by date
     var allPets = Model.LostPets
-    .Select(p => new { p.Id, p.Name, p.Description, p.Image, p.Date, ReportType = "Lost" })
-    .Concat(Model.FoundPets.Select(p => new { p.Id, p.Name, p.Description, p.Image, p.Date, ReportType = "Found" }))
-    .OrderByDescending(p => p.Date) // Sort by Date
-    .ToList();
+    .Select(p => new { p.Id, p.Name, p.Description, p.Image, p.Date, ReportType = "Lost" }) @*Select linq method transforms each item in LostPets list into an object, and also include a new item called ReportType *@
+.Concat(Model.FoundPets.Select(p => new { p.Id, p.Name, p.Description, p.Image, p.Date, ReportType = "Found" })) @*Does the same as above but combines with concat into a single sequence*@
+.OrderByDescending(p => p.Date) @*Sorts by date*@
+.ToList(); @*Converts the sequence to a list*@
 }
 
 <div class="container-fluid reportlist p-4" style="display: flex; justify-content: center;">
@@ -36,3 +36,42 @@
         </div>
     </div>
 </div>
+
+
+@* 
+
+@{
+    // Till Kit yee och Niklas, om ni inte vill använda linq
+
+    var allPets = new List<dynamic>(); //Tom lista av typen dynamic, som kan ta emot objekt
+
+    foreach (var lostPet in Model.LostPets) // Itererar genom LostPets och lägger till i den gemensamma listan
+    {
+        allPets.Add(new 
+        { 
+            Id = lostPet.Id, 
+            Name = lostPet.Name, 
+            Description = lostPet.Description, 
+            Image = lostPet.Image, 
+            Date = lostPet.Date, 
+            ReportType = "Lost" 
+        });
+    }
+
+    foreach (var foundPet in Model.FoundPets) // Itererar genom FoundPets och lägger till i den gemensamma listan
+    {
+        allPets.Add(new 
+        { 
+            Id = foundPet.Id, 
+            Name = foundPet.Name, 
+            Description = foundPet.Description, 
+            Image = foundPet.Image, 
+            Date = foundPet.Date, 
+            ReportType = "Found" 
+        });
+    }
+
+    allPets = allPets.OrderByDescending(p => p.Date).ToList(); 
+} 
+
+*@
