@@ -2,8 +2,29 @@
 @{
     //Combines lost and found reports into a single list and sort by date
     var allPets = Model.LostPets
-    .Select(p => new { p.Id, p.Name, p.Description, p.Image, p.Date, ReportType = "Lost" }) @*Select linq method transforms each item in LostPets list into an object, and also include a new item called ReportType *@
-.Concat(Model.FoundPets.Select(p => new { p.Id, p.Name, p.Description, p.Image, p.Date, ReportType = "Found" })) @*Does the same as above but combines with concat into a single sequence*@
+    .Select(p => new
+    {
+        p.Id,
+        p.Name,
+        p.Description,
+        p.Image,
+        p.Date,
+        ReportType = "Lost",
+        PetType = Model.PetTypes.FirstOrDefault(pt => pt.Id == p.PetTypeId)?.Type ?? "Unknown",
+        PhoneNumber = Model.Users.FirstOrDefault(pn => pn.Id == p.UserId)?.PhoneNumber ?? "Not available"
+
+    }) @*Select linq method transforms each item in LostPets list into an object, and also include a new item called ReportType *@
+.Concat(Model.FoundPets.Select(p => new
+{
+    p.Id,
+    p.Name,
+    p.Description,
+    p.Image,
+    p.Date,
+    ReportType = "Found",
+    PetType = Model.PetTypes.FirstOrDefault(pt => pt.Id == p.PetTypeId)?.Type ?? "Unknown",
+    PhoneNumber = Model.Users.FirstOrDefault(pn => pn.Id == p.UserId)?.PhoneNumber ?? "Not available"
+})) @*Does the same as above but combines with concat into a single sequence*@
 .OrderByDescending(p => p.Date) @*Sorts by date*@
 .ToList(); @*Converts the sequence to a list*@
 }
@@ -24,6 +45,8 @@
                                 <h5 class="card-title mt-3"><strong>@pet.Name</strong></h5>
                                 <p class="card-text">@pet.Description</p>
                                 <p class="card-text"><em>Report Category: @pet.ReportType</em></p>
+                                <p class="card-text"><em>Pet Type: @pet.PetType</em></p>
+                                <p class="card-text"><em>Phone Number: @pet.PhoneNumber</em></p>
                                 <!-- Indicate Lost or Found -->
                                 <p class="card-text"><small class="text-muted">Reported on:
                                         @pet.Date.ToString("dd-MM-yyyy")</small></p>

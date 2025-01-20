@@ -18,39 +18,14 @@ public class ReportsController : Controller
     public async Task<IActionResult> Index()
     {
 
-        var list = new FoundLostIndexVm
+        var viewModel = new FoundLostIndexVm
         {
             LostPets = await _context.LostPets.ToListAsync(),
             FoundPets = await _context.FoundPets.ToListAsync(),
-            // PetTypes = await _context.PetTypes.ToListAsync(),
-
+            PetTypes = await _context.PetTypes.ToListAsync(),
+            Users = await _context.Users.ToListAsync(),
         };
 
-        var LostPets = await _context.LostPets
-      .Select(lp => new
-      {
-          Name = lp.Name,
-          Description = lp.Description,
-          Image = lp.Image,
-          Id = lp.Id
-      })
-      .ToListAsync();
-
-        var FoundPets = await _context.FoundPets
-      .Select(fp => new
-      {
-          Name = fp.Name,
-          Description = fp.Description,
-          Image = fp.Image,
-          Id = fp.Id
-      })
-      .ToListAsync();
-
-
-
-        var AllPets = LostPets.Concat(FoundPets).OrderByDescending(p => p.Id).ToList();
-
-
-        return View(list);
+        return View(viewModel);
     }
 }
