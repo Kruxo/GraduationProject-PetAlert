@@ -1,35 +1,56 @@
 @model FoundLostIndexVm
 @{
-    @* var LostPets = new LostPets
-          .Select(lp => new
-          {
-              Name = lp.Name,
-              Description = lp.Description,
-              Image = lp.Image,
-              Id = lp.Id
-          })
-          .ToListAsync();
-
-            var FoundPets = new
-          .Select(fp => new
-          {
-              Name = fp.Name,
-              Description = fp.Description,
-              Image = fp.Image,
-              Id = fp.Id
-          })
-          .ToListAsync();
 
 
+    
+// Combine lostPetMarkers and foundPetMarkers
+var combinedMarkers = Model.LostPets
+    .Select(f => new
+    {
+        f.Name,
+        f.Description,
+        f.Image,
+        f.Latitude,
+        f.Longitude,
+    })
+    .Concat(Model.FoundPets
+        .Select(f => new
+        {
+            f.Name,
+            f.Description,
+            f.Image,
+            f.Latitude,
+            f.Longitude,
+        }))
+    .ToList();
 
-        var AllPets = LostPets.Concat(FoundPets).OrderByDescending(p => p.Id).ToList(); *@
-    @* var allPets = Model.LostPets.Concat(Model.FoundPets).OrderByDescending(p => p.Id).ToList(); *@
+
+
 }
 
 <div class="container-fluid reportlist p-4" style="display: flex; justify-content: center;">
     <div style="display: flex; justify-content: center; width:90%; max-width: 1200px;">
+        <ul class="list-unstyled">
+            <h3> List of lost and found pets</h3>
+        @foreach (var marker in combinedMarkers)
+        {
+    
+             <div class="card mb-1" style=" width:800px;">
+                <li class="row align-items-start">
+                    <div class="col-auto">
+                        <img src="@marker.Image" class="image-fit rounded-left " alt="@marker.Image">
+                    </div>
+                        <div class="col">
+                            <h5 class="card-title mt-3"><strong>@marker.Name</strong></h5>
+                            <p class="card-text me-3">@marker.Description</p>
+                        </div>
+                </li>
+            </div>
 
-        <div class="col-6 me-1 ms-1">
+        }
+        </ul>
+
+        @* <div class="col-6 me-1 ms-1">
             <table class="table">
                 <ul class="list-unstyled">
                     <p style="font-size: xx-large;">Lost pets </p>
@@ -74,5 +95,5 @@
                     }
                 </ul>
             </div>
-        </div>
+        </div> *@
     </div>
