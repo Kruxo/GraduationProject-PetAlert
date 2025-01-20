@@ -41,20 +41,17 @@
                         </ul>
                         <ul class="navbar-nav d-flex justify-content-end">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Lost" asp-action="Index">
-                                    Lost Pets</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Found" asp-action="Index">
-                                    Found Pets</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Index">
-                                    Reports</a>
+                                    Missing Pets</a>
                             </li>
 
                             @if (isAdmin)
                             {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Reports"
+                                        asp-action="YourReports">
+                                        Your Reported Pets</a>
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Lost" asp-action="Create">
                                         Create Lost Pet</a>
@@ -73,6 +70,11 @@
                             }
                             else if (SignInManager.IsSignedIn(User))
                             {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Reports"
+                                        asp-action="YourReports">
+                                        Your Reported Pets</a>
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="Lost" asp-action="Create">
                                         Create Lost Pet</a>

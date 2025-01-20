@@ -28,4 +28,18 @@ public class ReportsController : Controller
 
         return View(viewModel);
     }
+
+    public async Task<IActionResult> YourReports()
+    {
+
+        var viewModel = new FoundLostIndexVm
+        {
+            LostPets = await _context.LostPets.ToListAsync(),
+            FoundPets = await _context.FoundPets.ToListAsync(),
+            PetTypes = await _context.PetTypes.ToListAsync(),
+            Users = await _context.Users.ToListAsync(),
+        };
+
+        return View(viewModel);
+    }
 }
