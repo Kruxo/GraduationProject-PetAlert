@@ -1,12 +1,8 @@
 ﻿@model FoundLostIndexVm
 
-
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "PetAlert!";
 }
-
-<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-
 
 <style>
     /* Ensure image covers the entire width */
@@ -23,16 +19,35 @@
     .leaflet-popup-tip {
         display: none !important;
     }
+
+    .leaflet-popup-content {
+        margin: 0;
+        width: 300px;
+    }
+
+    .leaflet-popup-close-button span {
+        font-weight: bold;
+        color: white;
+        -webkit-text-stroke: 1px black;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        padding-bottom: 2px;
+    }
 </style>
 
 <body>
     <header class="container-fluid headerclass p-5">
-        <h1 class="brown-text"><strong>Help Find Lost Pets</strong></h1>
+        <h1 class="brown-text"><strong>Help Find Missing
+                Pets</strong></h1>
         <p class="dark-brown-text">Together we can reunite pets with their families. View the map or sign up to report a
             lost or found pet.
         </p>
-        <button class="button ">♡ Help Reunite Pets</button>
-        <button class="button ">⌕ Browse Reports</button>
+        <button class="button "><a class="nav-link" asp-controller="Home" asp-action="Index">
+                ♡ Help Reunite Pets</a></button>
+        <button class="button"><a class="nav-link" asp-controller="Reports" asp-action="Index">
+                ⌕ Browse Reports</a></button>
+
 
     </header>
 
@@ -126,55 +141,4 @@
         });
     </script>
     </div>
-
-    @* <div class="container-fluid reportlist p-4" style="display: flex; justify-content: center;">
-        <div style="display: flex; justify-content: center; width:90%; max-width: 1200px;">
-
-            <div class="col-6 me-1 ms-1">
-                <table class="table">
-                    <ul class="list-unstyled">
-                        <p style="font-size: xx-large;">Lost pets </p>
-                        @foreach (var lostPet in Model.LostPets.OrderByDescending(p => p.Id).Take(3))
-                        {
-                            <div class="card mb-1">
-                                <li class="row align-items-start">
-                                    <div class="col-auto">
-                                        <img src="@lostPet.Image" class="image-fit rounded-left " alt="@lostPet.Image">
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="card-title mt-3"><strong>@lostPet.Name</strong></h5>
-                                        <p class="card-text">@lostPet.Description</p>
-                                    </div>
-                                </li>
-                            </div>
-                        }
-                    </ul>
-
-                </table>
-            </div>
-
-            <div class="col-6 ms-1 me-1">
-                <div class="">
-                    <ul class="list-unstyled">
-
-
-                        <p style="font-size: xx-large;">Found pets </p>
-                        @foreach (var foundPet in Model.FoundPets.OrderByDescending(p => p.Id).Take(3))
-                        {
-                            <div class="card mb-1">
-                                <li class="row align-items-start">
-                                    <div class="col-auto">
-                                        <img src="@foundPet.Image" class="image-fit rounded-left " alt="@foundPet.Image">
-                                    </div>
-                                    <div class="col">
-                                        <h5 class="card-title mt-3"><strong>@foundPet.Name</strong></h5>
-                                        <p class="card-text">@foundPet.Description</p>
-                                    </div>
-                                </li>
-                            </div>
-                        }
-                    </ul>
-                </div>
-            </div>
-        </div> *@
 </body>
