@@ -7,22 +7,26 @@
     var isAdmin = await UserService.IsCurrentUserAdministratorAsync();
 }
 
+@{
+    ViewData["Title"] = "Reported Lost Pets";
+}
+
 <style>
     body {
         background-color: #fff9f4;
     }
 
-    h1 {
-        color: hsl(30, 10%, 20%);
-        font-size: 2rem;
+   h1 {
+        font-size: 2.5rem;
         font-weight: bold;
+        color: hsl(30, 10%, 20%);
+        margin-bottom: 30px;
         text-align: center;
-        margin-bottom: 20px;
     }
 
     .container {
         max-width: 1200px;
-        margin: 0 auto;
+        margin: 40px auto;
         padding: 20px;
     }
 
@@ -31,6 +35,7 @@
         background-color: #ffffff;
         border: none;
         border-radius: 16px;
+        border: 1px solid #e6ccb4;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
         overflow: hidden;
         margin: 20px;
@@ -60,21 +65,21 @@
         margin-bottom: 10px;
     }
 
-    .btn-warning {
-        background-color: hsl(45, 90%, 50%);
+    .btn-secondary {
+        background-color: hsl(30, 10%, 45%);
         border: none;
         color: white;
         font-weight: bold;
         transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
-    .btn-warning:hover {
+    .btn-secondary:hover {
         background-color: hsl(45, 90%, 45%);
         transform: translateY(-2px);
     }
 
     .btn-danger {
-        background-color: hsl(0, 70%, 50%);
+        background-color: hsl(30, 60%, 35%);
         border: none;
         color: white;
         font-weight: bold;
@@ -119,15 +124,17 @@
                         <div class="card-body">
                             <h5 class="card-title">@lostPet.Name</h5>
                             <p class="card-text">@lostPet.Description</p>
-                            <p class="card-text">@lostPet.User?.PhoneNumber</p>
-                            <p class="card-text">@lostPet.User?.UserName</p>
-                            @{
-                                var stockholmTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
-                                var stockholmDate = TimeZoneInfo.ConvertTimeFromUtc(lostPet.Date, stockholmTimeZone);
-                            }
-                            <p class="card-text"> @stockholmDate.ToString("dd-MM-yyyy HH:mm")</p>
+
                             <hr>
-                            <ul class="list-unstyled">
+                                <ul class="list-unstyled card-text">
+                                <li class="d-flex justify-content-between">
+                                    <strong>Phone Number:</strong>
+                                    <span>@lostPet.User?.PhoneNumber</span>
+                                </li>
+                                <li class="d-flex justify-content-between">
+                                    <strong>Email:</strong>
+                                    <span>@lostPet.User?.UserName</span>
+                                </li>
                                 <li class="d-flex justify-content-between">
                                     <strong>Pet Type:</strong>
                                     <span>@(Model.PetTypes.FirstOrDefault(t => t.Id == lostPet.PetTypeId)?.Type)</span>
@@ -136,10 +143,20 @@
                                     <strong>Chip ID:</strong>
                                     <span>@lostPet.ChipId</span>
                                 </li>
-                            </ul>
+                                <li class="d-flex justify-content-between">
+                                    <strong>Reported on:</strong>
+                                    <span>@{
+                                var stockholmTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central European Standard Time");
+                                var stockholmDate = TimeZoneInfo.ConvertTimeFromUtc(lostPet.Date, stockholmTimeZone);
+                            }
 
+                            <p class="card-text"> @stockholmDate.ToString("dd-MM-yyyy")</p></span>
+                                </li>
+                            </ul>
+<hr>
+                                
                             <div class="d-flex gap-2">
-                                <a asp-action="Edit" asp-route-id="@lostPet.Id" class="btn btn-warning flex-fill">Edit</a>
+                                <a asp-action="Edit" asp-route-id="@lostPet.Id" class="btn btn-secondary flex-fill">Edit</a>
                                 <a href="@Url.Action("Delete", "Lost", new { id = lostPet.Id })"
                                     class="btn btn-danger flex-fill">Delete</a>
                             </div>
