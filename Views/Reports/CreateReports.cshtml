@@ -9,7 +9,7 @@
 }
 
 @{
-    ViewData["Title"] = "Your reported pets";
+    ViewData["Title"] = "Create Report";
 }
 
 <style>
@@ -94,29 +94,24 @@
 
 <body>
     <div class="report-container">
-        <h1>Your reported pets</h1>
+        <h1>Report a missing pet</h1>
         <div class="card-container">
             <!-- Lost Pet Card -->
             <div class="card">
-                <div class="card-icon">
-                    <img width="50" height="50" src="https://img.icons8.com/ios/50/cat-footprint.png"
-                        alt="cat-footprint" />
-                </div>
-                <h2>Lost Pets</h2>
-                <p>This button will take you to your reported lost pets. Here you can view your reports, edit or delete
-                    them.</p>
-                <a class="btn" asp-area="" asp-controller="Lost" asp-action="Index">Your Lost Pets</a>
+
+                <img width="50" height="50" src="https://img.icons8.com/ios/50/task.png" alt="task" />
+
+                <h2>Lost Pet Form</h2>
+                <p>Report your missing pet and let our community help find them.</p>
+                <a class="btn" asp-area="" asp-controller="Lost" asp-action="Create">Report Lost Pet</a>
             </div>
 
             <!-- Found Pet Card -->
             <div class="card">
-                <div class="card-icon">
-                    <img width="50" height="50" src="https://img.icons8.com/ios/50/search--v1.png" alt="search--v1" />
-                </div>
-                <h2>Found Pets</h2>
-                <p>This button will take you to your reported found pets. Here you can view your reports, edit or delete
-                    them.</p>
-                <a class="btn" asp-area="" asp-controller="Found" asp-action="Index">Your Found Pets</a>
+                <img width="50" height="50" src="https://img.icons8.com/ios/50/task.png" alt="task" />
+                <h2>Found Pet Form</h2>
+                <p>Help reunite a found pet with their owner.</p>
+                <a class="btn" asp-area="" asp-controller="Found" asp-action="Create">Report Found Pet</a>
             </div>
         </div>
     </div>

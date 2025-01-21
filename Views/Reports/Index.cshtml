@@ -1,4 +1,9 @@
 @model FoundLostIndexVm
+
+@{
+    ViewData["Title"] = "List of Missing Pets";
+}
+
 @{
     //Combines lost and found reports into a single list and sort by date
     var allPets = Model.LostPets

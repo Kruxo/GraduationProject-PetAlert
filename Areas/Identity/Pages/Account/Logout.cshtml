@@ -1,52 +1,63 @@
 ﻿@page
 @model LogoutModel
+
 @{
     ViewData["Title"] = "Log out";
 }
 
 <style>
     body {
-        font-family: Arial, sans-serif;
-        background-color: #f8f9fa;
+        background-color: #fff9f4;
         margin: 0;
         padding: 0;
     }
 
     .logout-container {
         max-width: 400px;
-        margin: 50px auto;
+        margin: 40px auto;
         background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        padding: 20px;
+        border-radius: 16px;
+        border: 1px solid #e6ccb4;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        padding: 30px;
         text-align: center;
     }
 
+    @@media (max-width: 768px) {
+        .logout-container {
+            max-width: 300px;
+        }
+    }
+
+
     .logout-title {
-        font-size: 24px;
+        font-size: 28px;
         font-weight: bold;
-        margin-bottom: 10px;
-        color: #333;
+        margin-bottom: 15px;
+        color: hsl(30, 10%, 20%);
     }
 
     .logout-message {
-        color: #555;
+        color: hsl(30, 10%, 40%);
+        font-size: 16px;
         margin-bottom: 20px;
     }
 
     .btn-logout {
-        background-color: #dc3545;
+        background-color: hsl(30, 60%, 35%);
         color: white;
         border: none;
-        padding: 10px 20px;
+        padding: 14px 20px;
         font-size: 16px;
         cursor: pointer;
-        border-radius: 5px;
-        text-align: center;
+        border-radius: 12px;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     .btn-logout:hover {
-        background-color: #b52d37;
+        background-color: hsl(30, 60%, 30%);
+        transform: translateY(-2px);
     }
 </style>
 

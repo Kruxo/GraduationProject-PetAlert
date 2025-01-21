@@ -22,7 +22,6 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/GraduationProject.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
-
 </head>
 
 <body>
@@ -53,12 +52,9 @@
                                         Your Reported Pets</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Lost" asp-action="Create">
-                                        Create Lost Pet</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Found" asp-action="Create">
-                                        Create Found Pet</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Reports"
+                                        asp-action="CreateReports">
+                                        Report Missing Pets</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link text-dark" asp-area="" asp-controller="PetType" asp-action="Index">
@@ -76,12 +72,9 @@
                                         Your Reported Pets</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Lost" asp-action="Create">
-                                        Create Lost Pet</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Found" asp-action="Create">
-                                        Create Found Pet</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Reports"
+                                        asp-action="CreateReports">
+                                        Report Missing Pets</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link button" asp-area="Identity" asp-page="/Account/Logout">Log out</a>
