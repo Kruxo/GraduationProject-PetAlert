@@ -26,12 +26,13 @@
     }
 
     .form-title {
-        font-size: 28px;
+        font-size: 2.5rem;
         font-weight: bold;
         text-align: center;
+        text-transform: uppercase;
         margin-bottom: 15px;
-        color: hsl(30, 10%, 20%);
     }
+
 
     .form-description {
         text-align: center;
@@ -74,18 +75,14 @@
     .btn {
         display: block;
         width: 100%;
-        background-color: hsl(30, 60%, 35%);
         color: white;
         border: none;
-        padding: 14px 20px;
         font-size: 16px;
-        border-radius: 12px;
         font-weight: bold;
         transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     .btn:hover {
-        background-color: hsl(30, 60%, 30%);
         transform: translateY(-2px);
     }
 
@@ -110,7 +107,7 @@
 </style>
 
 <div class="form-container">
-    <h1 class="form-title">Create Found Pet Report</h1>
+    <h1 class="form-title">Found Pet Report</h1>
     <p class="form-description">Fill out the details about the found pet</p>
     <form asp-action="Create" method="post">
         <div class="form-group">
@@ -171,7 +168,7 @@
             <span asp-validation-for="FoundPet.Image" class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn">Submit Report</button>
+        <button type="submit" class="btn btn-primary" style="padding: 14px 20px">Submit Report</button>
     </form>
 </div>
 

@@ -36,7 +36,6 @@
     h1 {
         font-size: 28px;
         font-weight: bold;
-        color: hsl(30, 10%, 20%);
         text-align: center;
         margin-bottom: 20px;
     }
@@ -49,7 +48,7 @@
         padding: 20px;
     }
 
-    img {
+    .img-delete {
         border-radius: 12px;
         background-color: #f0e4d7;
         height: 200px;
@@ -66,36 +65,28 @@
     .btn-secondary {
         display: block;
         width: 100%;
-        background-color: hsl(30, 10%, 45%);
         color: #ffffff;
         border: none;
-        padding: 14px 20px;
         font-size: 16px;
-        border-radius: 12px;
         font-weight: bold;
         transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     .btn-secondary:hover {
-        background-color: hsl(30, 10%, 40%);
         transform: translateY(-2px);
     }
 
     .btn-danger {
         display: block;
         width: 100%;
-        background-color: hsl(28, 54%, 39%);
         color: white;
         border: none;
-        padding: 14px 20px;
         font-size: 16px;
-        border-radius: 12px;
         font-weight: bold;
         transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     .btn-danger:hover {
-        background-color: hsl(0, 70%, 50%);
         transform: translateY(-2px);
     }
 </style>
@@ -111,7 +102,7 @@
                 <div class="row g-0">
                     <!-- Found Pet Image Section -->
                     <div class="col-md-4 d-flex align-items-center justify-content-center p-3">
-                        <img src="@Model.LostPet.Image" alt="@Model.LostPet.Name">
+                        <img src="@Model.LostPet.Image" alt="@Model.LostPet.Name" class="img-delete">
                     </div>
 
                     <!-- Found Pet Details Section -->
@@ -119,9 +110,13 @@
                         <div class="card-body">
                             <h3 style="color: hsl(30, 10%, 20%);">@Model.LostPet.Name</h3>
                             <hr>
-                            <div class="d-flex justify-content-between">
+                            <div class="d-flex justify-content-between mt-4">
                                 <dt><strong>Description:</strong></dt>
                                 <dd>@Model.LostPet.Description</dd>
+                            </div>
+                            <div class="d-flex justify-content-between ">
+                                <dt><strong>Reported Date:</strong></dt>
+                                <dd>@Model.LostPet.Date</dd>
                             </div>
                             <form asp-action="Delete" class="mt-4">
                                 <input type="hidden" asp-for="LostPet.Id" />

@@ -26,10 +26,10 @@
     }
 
     .form-title {
-        font-size: 28px;
+        font-size: 2.5rem;
         font-weight: bold;
         text-align: center;
-        color: hsl(30, 10%, 20%);
+        text-transform: uppercase;
         margin-bottom: 15px;
     }
 
@@ -58,16 +58,13 @@
     .btn {
         display: block;
         width: 100%;
-        background-color: hsl(30, 60%, 35%);
         color: white;
         font-weight: bold;
-        padding: 12px 15px;
-        border-radius: 12px;
         transition: background-color 0.3s ease, transform 0.2s ease;
+        border: none;
     }
 
     .btn:hover {
-        background-color: hsl(30, 60%, 30%);
         transform: translateY(-2px);
     }
 </style>
@@ -87,6 +84,6 @@
             <span asp-validation-for="Image" class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn">Create</button>
+        <button type="submit" class="btn btn-primary" style="padding: 14px 20px">Create</button>
     </form>
 </div>

@@ -15,7 +15,6 @@ public class ReportsController : Controller
         _context = context;
     }
 
-
     public async Task<IActionResult> Index()
     {
 
@@ -29,6 +28,7 @@ public class ReportsController : Controller
 
         return View(viewModel);
     }
+
     [Authorize]
     public async Task<IActionResult> YourReports()
     {

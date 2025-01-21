@@ -1,5 +1,4 @@
 ﻿@model FoundLostIndexVm
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;700&display=swap" rel="stylesheet">
 
 @{
     ViewData["Title"] = "PetAlert!";
@@ -35,32 +34,58 @@
         text-align: center;
         padding-bottom: 2px;
     }
+
+    .animate-missing {
+        font-size: 3.5rem;
+        display: inline-block;
+        color: hsl(44, 100%, 50%);
+        position: relative;
+        animation: floatUp 5s ease-in-out infinite;
+
+        text-shadow:
+            -1px -1px 0 #9c7f5d,
+            1px -1px 0 #9c7f5d,
+            -1px 1px 0 #9c7f5d,
+            1px 1px 0 #9c7f5d;
+
+    }
+
+
+    @@keyframes floatUp {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+    }
 </style>
 
 <body>
     <header class="container-fluid headerclass p-5">
-        <h1 class="brown-text"><strong>Help Find Missing
+        <h1 class="brown-text" style="font-size: 50px; "><strong>Help Find <span class="animate-missing">Missing</span>
                 Pets</strong></h1>
-        <p class="dark-brown-text">Together we can reunite pets with their families. View the map or <br>sign up to report a
+        <p class="dark-brown-text">Together we can reunite pets with their families. View the map or <br>sign up to
+            report a
             lost or found pet.
         </p>
-        <button class="button "><a class="nav-link" asp-controller="Home" asp-action="Index">
+        <button class="button" style="padding: 10px 0; margin-top: 10px;"><a style="color: white !important;"
+                class="nav-link" asp-controller="Reports" asp-action="CreateReports">
                 ♡ Help Reunite Pets</a></button>
-        <button class="button"><a class="nav-link" asp-controller="Reports" asp-action="Index">
+        <button class="button" style="padding: 10px 0; margin-top: 10px; "><a style="color: white !important;"
+                class="nav-link" asp-controller="Reports" asp-action="Index">
                 ⌕ Browse Reports</a></button>
-
-
     </header>
 
 
     <div class="container-fluid p-4">
-
-
-   
         <div id="map-container" style=" display: flex; justify-content: center;">
             <div id="map" style="
                 height: 60vh; /* Height is responsive to viewport */
-                width: 90%;
+                width: 80%;
                 border-radius: 15px;
                 box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
                 border: 2px solid #ccc;
@@ -129,8 +154,8 @@
                                 <i class="fas fa-paw"></i> ${marker.petType}
                             </span>
                         </div>
-                        <p class="text-muted mb-2">${marker.description}</p>    
-                        <p class="text-muted mb-2">${marker.phoneNumber}</p>
+                        <p class="text-muted mb-2"><b>Description: </b>${marker.description}</p>    
+                        <p class="text-muted mb-2"><b>Phone Number: </b>${marker.phoneNumber}</p>
                         <p class="text-muted mb-2"> ${marker.chipId ? '<b>Chip ID: </b>' + marker.chipId : ""}</p >
                     </div >
 

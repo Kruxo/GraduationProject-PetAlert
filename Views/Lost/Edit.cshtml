@@ -19,7 +19,6 @@
     h1 {
         font-size: 2rem;
         font-weight: bold;
-        color: hsl(30, 10%, 20%);
         text-align: center;
     }
 
@@ -61,7 +60,6 @@
     }
 
     .btn-primary {
-        background-color: hsl(28, 54%, 44%);
         border: none;
         color: white;
         padding: 12px;
@@ -71,14 +69,13 @@
     }
 
     .btn-primary:hover {
-        background-color: hsl(28, 54%, 39%);
         transform: translateY(-2px);
     }
 
-    img {
+    .pet-image {
         border-radius: 8px;
-        max-width: 200px;
-        max-height: 200px;
+        width: 200px;
+        height: 200px;
         object-fit: cover;
         background-color: #f0e4d7;
     }
@@ -91,10 +88,10 @@
     {
 
         <div class="card">
-            <h1 class="form-title">Edit Found Pet Entry</h1>
+            <h1 class="form-title">Edit Lost Pet Entry</h1>
             <!-- Picture Section -->
             <div class="d-flex flex-column align-items-center">
-                <img src="@Model.LostPet.Image" alt="Found Pet">
+                <img class="pet-image" src="@Model.LostPet.Image" alt="Found Pet">
             </div>
 
             <!-- Form Section -->

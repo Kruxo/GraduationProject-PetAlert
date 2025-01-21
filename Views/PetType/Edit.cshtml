@@ -11,9 +11,8 @@
     }
 
     h1 {
-        font-size: 2.5rem;
+        font-size: 2rem;
         font-weight: bold;
-        color: hsl(30, 10%, 20%);
         text-align: center;
     }
 
@@ -54,24 +53,20 @@
     }
 
     .btn-primary {
-        background-color: hsl(28, 54%, 44%);
         border: none;
         color: white;
-        padding: 12px;
-        border-radius: 8px;
         transition: background-color 0.3s ease, transform 0.2s ease;
         font-weight: bold;
     }
 
     .btn-primary:hover {
-        background-color: hsl(28, 54%, 39%);
         transform: translateY(-2px);
     }
 
-    img {
+    .delete-img {
         border-radius: 8px;
-        max-width: 200px;
-        max-height: 200px;
+        width: 200px;
+        height: 200px;
         object-fit: cover;
         background-color: #f0e4d7;
     }
@@ -81,11 +76,12 @@
     }
 </style>
 
-<h1 class="text-center">Edit Pet Type</h1>
+
 <div class="card">
+    <h1 class="text-center">Edit Pet Type</h1>
     <!-- Picture Section -->
     <div class="d-flex flex-column align-items-center">
-        <img src="@Model.Image" alt="@Model.Type">
+        <img class="delete-img" src="@Model.Image" alt="@Model.Type">
     </div>
 
     <!-- Form Section -->
@@ -106,7 +102,7 @@
             </div>
 
             <div class="form-group mt-4">
-                <button type="submit" class="btn btn-primary w-100">Save Changes</button>
+                <button type="submit" class="btn btn-primary w-100" style="padding: 14px 20px">Save Changes</button>
             </div>
         </form>
     </div>

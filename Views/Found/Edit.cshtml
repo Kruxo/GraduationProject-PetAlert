@@ -21,7 +21,6 @@
     h1 {
         font-size: 2rem;
         font-weight: bold;
-        color: hsl(30, 10%, 20%);
         text-align: center;
     }
 
@@ -71,10 +70,10 @@
         transform: translateY(-2px);
     }
 
-    img {
+    .pet-image {
         border-radius: 8px;
-        max-width: 200px;
-        max-height: 200px;
+        width: 200px;
+        height: 200px;
         object-fit: cover;
         background-color: #f0e4d7;
     }
@@ -90,7 +89,7 @@
             <h1>Edit Found Pet Entry</h1>
             <!-- Picture Section -->
             <div class="d-flex flex-column align-items-center">
-                <img src="@Model.FoundPet.Image" alt="Found Pet">
+                <img class="pet-image" src="@Model.FoundPet.Image" alt="Found Pet">
             </div>
 
             <!-- Form Section -->

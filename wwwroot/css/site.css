@@ -1,53 +1,165 @@
+/* Importing fonts */
 @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Raleway:ital,wght@0,100..900;1,100..900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap');
 
-*{
+* {
     font-family: "Roboto Condensed", serif;
 }
 
-.container2 {
-    border: solid black 10px;
-    text-align: center;
-}
-
-.reportlist {
-    background-color: hsl(150, 15%, 86%);
+body {
+    background-color: #fff9f4;
 }
 
 .headerclass {
     background-size: 40%;
     background-image: url('/Images/PawHeader.png');
     text-align: center;
-
 }
 
-.button {
+/* .image-fit {
+    height: 150px;
+    width: 150px;
+    object-fit: cover;
+    border-radius: 3% 0 0 3%;
+} */
+
+.brand {
+    color: hsl(28, 54%, 44%);
+    text-decoration: none;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+nav li:hover {
     border-radius: 30px;
+    background-color: hsla(28, 44%, 74%, 0.37);
+    color: white;
+    border: none;
+    transition: 0.3s;
+}
+
+.brown-text {
+    color: hsl(28, 54%, 44%);
+    
+}
+
+.dark-brown-text {
+    color: hsl(30, 10%, 45%);
+}
+
+.very-brown-text {
+    color: hsl(30, 10%, 20%);
+}
+
+
+.button {
+    border-radius: 15px;
     background-color: hsl(28, 54%, 44%);
     box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.09);
     color: white;
     border: none;
     padding-left: 20px !important;
     padding-right: 20px !important;
-
 }
 
-.button:hover{
-    border-radius: 30px;
-    background-color:hsl(28, 54%, 35%);
-    color:white !important;
-
+.button:hover,
+.btn-success:hover,
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-danger:hover {
+    background-color: hsl(28, 54%, 35%);
+    color: white !important;
 }
 
-.brand{
-    color:hsl(28, 54%, 44%);
-    text-decoration: none;
-    font-size: 25px;
+.btn {
+    background-color: hsl(28, 54%, 44%);
+    color: white !important;
+    border-radius: 15px;
+    text-transform: uppercase;
+    font-weight: bold;
 }
 
-li:hover{
-    border-radius: 30px;
-    background-color: hsla(28, 54%, 44%, 0.33);
-    color: white;
+.btn-danger,
+.btn-primary {
+    background-color: hsl(28, 54%, 44%);
+    color: white !important;
+    border-radius: 15px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.btn-secondary,
+.btn-success {
+    background-color: hsl(26, 21%, 55%);
+    color: white !important;
+    border-radius: 15px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+
+.btn-success:hover,
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-danger:hover {
+    background-color: hsl(28, 54%, 35%);
+    color: white !important;
+}
+
+
+
+
+.form-title {
+    color: hsl(30, 60%, 30%);
+    text-transform: uppercase;
+}
+
+h1 {
+    color: hsl(30, 60%, 30%);
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+
+
+.nav-item {
+    text-transform: uppercase;
+}
+
+
+.navbar-light {
+    background-color: #fff; /* Light background for the navbar */
+}
+
+.nav-link {
+    font-weight: 500;
+    color: hsl(30, 10%, 45%) !important;
+    transition: color 0.3s ease-in-out;
+    border-radius: 15px;
+}
+
+.nav-link:hover {
+    color: hsl(28, 54%, 44%) !important;
+}
+
+
+.navbar-toggler {
     border: none;
 }
 
+
+
+
+.nav-item {
+    margin-left: 10px;
+    font-size: 16px;
+}
+
+.navbar-collapse {
+    justify-content: flex-end;
+}
+
+@media (max-width: 992px) {
+    .nav-item {
+        margin-top: 10px;
+    }
+}
