@@ -9,6 +9,7 @@
         p.Description,
         p.Image,
         p.Date,
+        ChipId = p.ChipId,
         ReportType = "Lost",
         PetType = Model.PetTypes.FirstOrDefault(pt => pt.Id == p.PetTypeId)?.Type ?? "Unknown",
         PhoneNumber = Model.Users.FirstOrDefault(pn => pn.Id == p.UserId)?.PhoneNumber ?? "Not available"
@@ -21,6 +22,7 @@
     p.Description,
     p.Image,
     p.Date,
+    ChipId = "Not available",
     ReportType = "Found",
     PetType = Model.PetTypes.FirstOrDefault(pt => pt.Id == p.PetTypeId)?.Type ?? "Unknown",
     PhoneNumber = Model.Users.FirstOrDefault(pn => pn.Id == p.UserId)?.PhoneNumber ?? "Not available"
@@ -33,24 +35,36 @@
     <div style="display: flex; justify-content: center; width:90%; max-width: 1200px;">
         <div class="col-12">
             <ul class="list-unstyled">
-                <p style="font-size: xx-large;">Reported Pets</p>
                 @foreach (var pet in allPets)
                 {
                     <div class="card mb-1">
-                        <li class="row align-items-start">
+                        <li class="row align-items-start postition-relative">
                             <div class="col-auto">
-                                <img src="@pet.Image" class="image-fit rounded-left" alt="@pet.Image">
+                                <img src="@pet.Image" class="image-fit" alt="@pet.Image">
                             </div>
                             <div class="col">
-                                <h5 class="card-title mt-3"><strong>@pet.Name</strong></h5>
+                                <div class="card-title mt-2 "><strong>@pet.Name</strong>
+                                    <span>
+                                        <span class="badge bg-info text-dark">@pet.PetType</span>
+                                        @if (pet.ReportType == "Found")
+                                        {
+                                            <span class="badge bg-warning text-dark">@pet.ReportType</span>
+                                        }
+                                        @if (pet.ReportType == "Lost")
+                                        {
+                                            <span class="badge bg-danger text-dark">@pet.ReportType</span>
+                                        }
+                                    </span>
+                                </div>
+                                <div><small><em>Chip id: @pet.ChipId </em></small></div>
+                                <div class="card-text"><small><em>Address: </em></small></div>
+                                <div class="card-text"><small><em>Phone Number:
+                                        </em><strong>@pet.PhoneNumber</strong></small></div>
+                                <div><small class="text-muted">Reported: @pet.Date.ToString("dd-MM-yyyy")</small></div>
+                            </div>
+                            <div class="col mt-2 me-2">
+                                <h5 class="card-title"><strong>Description</strong></h5>
                                 <p class="card-text">@pet.Description</p>
-                                <p class="card-text"><em>Report Category: @pet.ReportType</em></p>
-                                <p class="card-text"><em>Pet Type: @pet.PetType</em></p>
-                                <p class="card-text"><em>Phone Number: @pet.PhoneNumber</em></p>
-                                <!-- Indicate Lost or Found -->
-                                <p class="card-text"><small class="text-muted">Reported on:
-                                        @pet.Date.ToString("dd-MM-yyyy")</small></p>
-                                <!-- "dd-MMMM-yyyy" om man vill månaden skriven ut i bokstäver -->
                             </div>
                         </li>
                     </div>
