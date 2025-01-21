@@ -28,7 +28,7 @@
     .leaflet-popup-close-button span {
         font-weight: bold;
         color: white;
-        -webkit-text-stroke: 1px black;
+        @* -webkit-text-stroke: 1px black; *@
         display: flex;
         justify-content: center;
         text-align: center;
@@ -141,23 +141,37 @@
                             .bindPopup(`
 
                     <img src="${marker.image}" alt="${marker.name}"
-                        style="height: 160px; width: 100%; object-fit: cover; ">
-                    <div class=" p-2">
-                        <!-- Display the formatted address -->
-                        <div class="d-flex align-items-center text-muted small mb-2">
-                            <i class="fas fa-map-marker-alt me-1"></i> ${formattedAddress}
-                        </div>
-                        <h5 class="fw-bold text-dark">${marker.name}</h5>
-                        <!-- Pet Type Badge -->
-                        <div class="d-flex align-items-center">
-                            <span class="badge bg-warning text-dark">
-                                <i class="fas fa-paw"></i> ${marker.petType}
-                            </span>
-                        </div>
-                        <p class="text-muted mb-2"><b>Description: </b>${marker.description}</p>    
-                        <p class="text-muted mb-2"><b>Phone Number: </b>${marker.phoneNumber}</p>
-                        <p class="text-muted mb-2"> ${marker.chipId ? '<b>Chip ID: </b>' + marker.chipId : ""}</p >
-                    </div >
+    style="height: 160px; width: 100%; object-fit: cover;">
+<div class="p-2">
+    <!-- Display the formatted address -->
+    <div class="d-flex align-items-center text-muted small mb-2">
+        <i class="fas fa-map-marker-alt me-1"></i> ${formattedAddress}
+    </div>
+    <!-- Name and Pet Type -->
+    <h5 class="fw-bold text-dark d-flex align-items-center">
+        ${marker.name}
+        <span class="badge bg-warning text-dark ms-2">
+            <i class="fas"></i> ${marker.petType}
+        </span>
+    </h5>
+    <!-- Description -->
+    <div class="text-muted" style="margin-bottom: 5px">
+        <b>Description:</b>
+        <div>${marker.description}</div>
+    </div>
+    <!-- Phone Number -->
+    <div class="text-muted" style="margin-bottom: 5px">
+        <b>Phone Number:</b>
+        <div>${marker.phoneNumber}</div>
+    </div>
+    <!-- Chip ID -->
+    ${marker.chipId ? `
+    <div class="text-muted" style="margin-bottom: 5px">
+        <b>Chip ID:</b>
+        <div>${marker.chipId}</div>
+    </div>` : ""}
+</div>
+
 
             `, { minWidth: 300, maxWidth: 320 });
                     })
