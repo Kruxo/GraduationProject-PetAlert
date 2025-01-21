@@ -30,7 +30,7 @@
         <header>
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
                 <div class="container-fluid">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PetAlert</a>
+                    <a class="brand" asp-area="" asp-controller="Home" asp-action="Index">PetAlert</a>
                     <button class="navbar-toggler brown-text" type="button" data-bs-toggle="collapse"
                         data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false"
                         aria-label="Toggle navigation">
@@ -64,8 +64,8 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="PetType" asp-action="Index">
                                         Pet Types</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout">Log out</a>
+                                <li class="nav-item ms-1">
+                                   <a class="nav-link button" asp-area="Identity" asp-page="/Account/Logout">Log out</a>
                                 </li>
                             }
                             else if (SignInManager.IsSignedIn(User))
@@ -84,13 +84,13 @@
                                         Create Found Pet</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout">Log out</a>
+                                    <a class="nav-link button" asp-area="Identity" asp-page="/Account/Logout">Log out</a>
                                 </li>
                             }
                             else
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Sign in</a>
+                                <li class="nav-item ms-1">
+                                    <a class="nav-link button" asp-area="Identity" asp-page="/Account/Login">Sign in</a>
                                 </li>
                             }
 
@@ -107,13 +107,12 @@
             </main>
         </div>
 
-        <footer>
-            @* class="border-top footer text-muted" *@
+     @* <footer>
             <div class="container">
                 &copy; 2025 - GraduationProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
             </div>
-        </footer>
-    </div>
+        </footer>  *@
+    </div> 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
