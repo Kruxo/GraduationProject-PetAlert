@@ -21,8 +21,8 @@ public class LostController : Controller
     public async Task<IActionResult> Index()
     {
         var lostPets = await _context.LostPets
-.Include(f => f.User)
-.ToListAsync();
+        .Include(f => f.User)
+        .ToListAsync();
 
         var vm = new LostIndexVm
         {
