@@ -48,23 +48,29 @@
     }
 
     .form-control {
-        padding: 12px;
-        border: 1px solid #e6ccb4;
-        border-radius: 8px;
-        background-color: #fff9f4;
-        transition: box-shadow 0.3s ease, border-color 0.3s ease;
+        width: 100%;
+        padding: 12px 15px;
+        font-size: 16px;
+        border: 2px solid hsl(30, 20%, 85%);
+        border-radius: 12px;
+        background-color: #fffaf4;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
     .form-control:focus {
-        border-color: hsl(28, 54%, 44%);
-        box-shadow: 0 0 6px rgba(162, 107, 61, 0.5);
+        outline: none;
+        border-color: hsl(30, 30%, 65%);
+        box-shadow: 0 0 8px rgba(162, 107, 61, 0.4);
+    }
+
+    .form-control::placeholder {
+        color: hsl(30, 10%, 65%);
     }
 
     .btn-primary {
         border: none;
         color: white;
         padding: 12px;
-        border-radius: 8px;
         transition: background-color 0.3s ease, transform 0.2s ease;
         font-weight: bold;
     }
