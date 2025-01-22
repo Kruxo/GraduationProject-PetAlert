@@ -1,0 +1,40 @@
+
+
+@model PetAlert.ViewModels.ChatbotViewModel
+
+
+<div class="container py-5">
+    <div class="card chatbot-card shadow-lg">
+        <div class="card-header bg-primary text-white d-flex align-items-center">
+            <i class="fas fa-robot me-2"></i> AI Chatbot for Lost & Found Pets
+        </div>
+
+        <div class="card-body chat-box" style="height: 400px; overflow-y: scroll; background: #f8f9fa;">
+            @if (Model.Messages != null)
+            {
+                @foreach (var message in Model.Messages)
+                {
+                    <div class="@(message.IsUser ? "text-end" : "text-start")">
+                        <span class="fw-bold">@(message.IsUser ? "You:" : "Bot:")</span>
+                        <div class="@(message.IsUser ? "alert alert-primary" : "alert alert-secondary") p-2">
+                            @Html.Raw(message.Text?.ToString())
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        <div class="card-footer">
+            <form asp-action="Chat" method="post">
+                @Html.AntiForgeryToken()
+                <div class="input-group">
+                    <input asp-for="UserMessage" class="form-control" placeholder="Ask about lost pets..." required>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </form>
+
+
+
+        </div>
+    </div>
+</div>
