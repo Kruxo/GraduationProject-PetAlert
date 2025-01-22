@@ -11,13 +11,13 @@ namespace PetAlert.Services
         private readonly HttpClient _httpClient;
         private readonly string _apiKey;
 
-        public LocationService(HttpClient httpClient,IConfiguration configuration)
+        public LocationService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
 
             // ✅ OpenCage API Key (Replace with your own)
-             _apiKey = configuration["OpenCage:ApiKey"]
-                    ?? throw new InvalidOperationException("❌ Missing Google AI API Key. Ensure it is set in appsettings.json.");
+            _apiKey = configuration["OpenCage:ApiKey"]
+                   ?? throw new InvalidOperationException("❌ Missing OpenCage API Key. Ensure it is set in appsettings.json.");
         }
 
         /// <summary>
