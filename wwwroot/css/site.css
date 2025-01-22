@@ -105,6 +105,16 @@ nav li:hover {
     color: white !important;
 }
 
+.btn-light {
+    background-color: hsl(44, 100%, 45%) !important;
+}
+
+.bg-white {
+    background-color: hsl(44, 100%, 45%) !important;
+}
+.btn-white:hover {
+    background-color: hsl(44, 100%, 40%) !important;
+}
 
 
 
@@ -259,7 +269,7 @@ h1 {
 
 
 
-=======
+
 .navbar-light {
     background-color: #fff; /* Light background for the navbar */
 }
@@ -280,9 +290,6 @@ h1 {
     border: none;
 }
 
-
-
-
 .nav-item {
     margin-left: 10px;
     font-size: 16px;
@@ -297,4 +304,3 @@ h1 {
         margin-top: 10px;
     }
 }
-

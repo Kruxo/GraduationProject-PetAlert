@@ -101,88 +101,67 @@
 
 
 
-   <!-- Floating Chatbot Button -->
-<button type="button" class="btn btn-primary chatbot-btn" id="chatbotIcon">
-    <i class="fas fa-robot"></i>
-</button>
+        <!-- Floating Chatbot Button -->
+        <button type="button" class="btn btn-light chatbot-btn" id="chatbotIcon">
+            <i class="fas fa-robot"></i>
+        </button>
 
-<!-- Chatbot Modal -->
-<div class="chatbot-container d-none" id="chatbotContainer">
-    <div class="chatbot-header bg-primary text-white d-flex justify-content-between align-items-center p-2">
-        <span><i class="fas fa-robot"></i> AI Chatbot</span>
-        <button class="btn-close btn-close-white" id="closeChatbot"></button>
-    </div>
-    <div class="chatbot-body" id="chatbotMessages"></div>
-    <div class="chatbot-footer">
-        <input type="text" id="chatbotInput" class="form-control" placeholder="Ask about lost pets..." />
-        <button id="chatbotSend" class="btn btn-primary"><i class="fas fa-paper-plane"></i></button>
-    </div>
-</div>
-
-
-
-
-
-        <footer>
-            @* class="border-top footer text-muted" *@
-            <div class="container">
-                &copy; 2025 - GraduationProject - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        <!-- Chatbot Modal -->
+        <div class="chatbot-container d-none" id="chatbotContainer">
+            <div class="chatbot-header bg-white text-white d-flex justify-content-between align-items-center p-2">
+                <span><i class="fas fa-robot"></i> AI Chatbot</span>
+                <button class="btn-close btn-close-white" id="closeChatbot"></button>
             </div>
-        </footer>
-    </div>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+            <div class="chatbot-body" id="chatbotMessages"></div>
+            <div class="chatbot-footer">
+                <input type="text" id="chatbotInput" class="form-control" placeholder="Ask about lost pets..." />
+                <button id="chatbotSend" class="btn btn-light"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
 
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
-    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const chatbotIcon = document.getElementById("chatbotIcon");
+                const chatbotContainer = document.getElementById("chatbotContainer");
+                const closeChatbot = document.getElementById("closeChatbot");
+                const chatbotInput = document.getElementById("chatbotInput");
+                const chatbotSend = document.getElementById("chatbotSend");
+                const chatbotMessages = document.getElementById("chatbotMessages");
 
+                chatbotIcon.addEventListener("click", function () {
+                    chatbotContainer.classList.toggle("d-none");
+                });
 
+                closeChatbot.addEventListener("click", function () {
+                    chatbotContainer.classList.add("d-none");
+                });
 
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const chatbotIcon = document.getElementById("chatbotIcon");
-        const chatbotContainer = document.getElementById("chatbotContainer");
-        const closeChatbot = document.getElementById("closeChatbot");
-        const chatbotInput = document.getElementById("chatbotInput");
-        const chatbotSend = document.getElementById("chatbotSend");
-        const chatbotMessages = document.getElementById("chatbotMessages");
+                chatbotSend.addEventListener("click", sendMessage);
+                chatbotInput.addEventListener("keypress", function (event) {
+                    if (event.key === "Enter") sendMessage();
+                });
 
-        chatbotIcon.addEventListener("click", function () {
-            chatbotContainer.classList.toggle("d-none");
-        });
+                function sendMessage() {
+                    const userMessage = chatbotInput.value.trim();
+                    if (userMessage === "") return;
 
-        closeChatbot.addEventListener("click", function () {
-            chatbotContainer.classList.add("d-none");
-        });
+                    chatbotMessages.innerHTML += `<div class="user-message">${userMessage}</div>`;
+                    chatbotInput.value = "";
 
-        chatbotSend.addEventListener("click", sendMessage);
-        chatbotInput.addEventListener("keypress", function (event) {
-            if (event.key === "Enter") sendMessage();
-        });
-
-        function sendMessage() {
-            const userMessage = chatbotInput.value.trim();
-            if (userMessage === "") return;
-
-            chatbotMessages.innerHTML += `<div class="user-message">${userMessage}</div>`;
-            chatbotInput.value = "";
-
-            fetch("/Chatbot/Chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: `UserMessage=${encodeURIComponent(userMessage)}`
-            })
-                .then(response => response.text())
-                .then(data => {
-                    chatbotMessages.innerHTML += `<div class="bot-message">${data}</div>`;
-                    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-                })
-                .catch(error => console.error("Chatbot error:", error));
-        }
-    });
-</script>
+                    fetch("/Chatbot/Chat", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                        body: `UserMessage=${encodeURIComponent(userMessage)}`
+                    })
+                        .then(response => response.text())
+                        .then(data => {
+                            chatbotMessages.innerHTML += `<div class="bot-message">${data}</div>`;
+                            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+                        })
+                        .catch(error => console.error("Chatbot error:", error));
+                }
+            });
+        </script>
 
 
 
@@ -193,7 +172,7 @@
         <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
         <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
         @await RenderSectionAsync("Scripts", required: false)
-
+    </div>
 </body>
 
 </html>
