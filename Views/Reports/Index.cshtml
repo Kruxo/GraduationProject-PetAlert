@@ -106,6 +106,10 @@
         font-size: 0.9rem;
     }
 
+    .card-margin {
+        margin-bottom: 5px;
+    }
+
     /* Responsive Styling */
     @@media (max-width: 768px) {
         .card {
@@ -131,6 +135,10 @@
             padding-left: 30px;
             padding-bottom: 10px;
         }
+
+        .card-margin {
+            margin-bottom: 10px;
+        }
     }
 </style>
 
@@ -141,7 +149,7 @@
         <ul class="list-unstyled">
             @foreach (var pet in allPets)
             {
-                <div class="card mb-1">
+                <div class="card card-margin">
                     <li class="row align-items-start position-relative">
                         <!-- Pet Image -->
                         <img src="@pet.Image" alt="@pet.Name">
