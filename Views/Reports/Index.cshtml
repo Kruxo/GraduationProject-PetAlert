@@ -14,6 +14,8 @@
         p.Description,
         p.Image,
         p.Date,
+        p.Longitude,
+        p.Latitude,
         ChipId = p.ChipId,
         ReportType = "Lost",
         PetType = Model.PetTypes.FirstOrDefault(pt => pt.Id == p.PetTypeId)?.Type ?? "Unknown",
@@ -27,6 +29,8 @@
     p.Description,
     p.Image,
     p.Date,
+    p.Longitude,
+    p.Latitude,
     ChipId = "Not available",
     ReportType = "Found",
     PetType = Model.PetTypes.FirstOrDefault(pt => pt.Id == p.PetTypeId)?.Type ?? "Unknown",
@@ -179,7 +183,7 @@
                                 <strong>Chip ID:</strong> @pet.ChipId
                             </div>
                             <div class="card-text">
-                                <strong>Address:</strong> Testing Street
+                                <strong>Address:</strong> 123 Test Street@* @pet.Latitude @pet.Longitude *@
                             </div>
                             <div class="card-text">
                                 <strong>Phone Number:</strong> @pet.PhoneNumber
