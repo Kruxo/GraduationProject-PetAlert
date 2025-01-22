@@ -15,7 +15,6 @@
     <title>@ViewData["Title"] - PetAlert</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
     <!-- FontAwesome (for icons) -->
@@ -28,84 +27,78 @@
 <body>
     <div class="wrapper">
         <header>
-            <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
                 <div class="container-fluid">
-                    <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PetAlert</a>
+                    <!-- Brand Logo and Name -->
+                    <a class="navbar-brand d-flex align-items-center" href="@Url.Action("Index", "Home")">
+                        <img width="40" height="40" src="https://cdn-icons-png.flaticon.com/512/9152/9152624.png"
+                            alt="dog-paw-print" class="me-2">
+                        <span class="brand">PETALERT</span>
+                    </a>
+                    <!-- Navbar Toggler -->
                     <button class="navbar-toggler brown-text" type="button" data-bs-toggle="collapse"
-                        data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false"
+                        data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
                         aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                        <ul class="navbar-nav d-flex justify-content-start">
-                        </ul>
-                        <ul class="navbar-nav d-flex justify-content-end">
+                    <!-- Navbar Links -->
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto align-items-center">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Lost" asp-action="Index">
-                                    Lost Pets</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Found" asp-action="Index">
-                                    Found Pets</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Index">
-                                    Reports</a>
+                                <a class="nav-link" href="@Url.Action("Index", "Reports")">Missing Pets</a>
                             </li>
 
 
 
                             @if (isAdmin)
                             {
+
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Lost" asp-action="Create">
-                                        Create Lost Pet</a>
+                                    <a class="nav-link" href="@Url.Action("CreateReports", "Reports")">Create Report</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Found" asp-action="Create">
-                                        Create Found Pet</a>
+                                    <a class="nav-link" href="@Url.Action("YourReports", "Reports")">Reported Pets</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="PetType" asp-action="Index">
-                                        Pet Types</a>
+                                    <a class="nav-link" href="@Url.Action("Index", "PetType")">Pet Types</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout">Log out</a>
+                                <li class="nav-item ms-3">
+                                    <a class="btn btn-danger px-4" style="border: none;"
+                                        href="@Url.Page("/Account/Logout", new { area = "Identity" })">Log out</a>
                                 </li>
                             }
                             else if (SignInManager.IsSignedIn(User))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Lost" asp-action="Create">
-                                        Create Lost Pet</a>
+                                    <a class="nav-link" href="@Url.Action("CreateReports", "Reports")">Create Report</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Found" asp-action="Create">
-                                        Create Found Pet</a>
+                                    <a class="nav-link" href="@Url.Action("YourReports", "Reports")">Reported Pets</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Logout">Log out</a>
+                                <li class="nav-item ms-3">
+                                    <a class="btn btn-danger px-4" style="border: none;"
+                                        href="@Url.Page("/Account/Logout", new { area = "Identity" })">Log out</a>
                                 </li>
                             }
                             else
                             {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Sign in</a>
+                                <li class="nav-item ms-3">
+                                    <a class="btn btn-danger px-4" style="border: none;"
+                                        href="@Url.Page("/Account/Login", new { area = "Identity" })">Sign in</a>
                                 </li>
                             }
-
-
                         </ul>
-
                     </div>
                 </div>
             </nav>
         </header>
+
         <div>
             <main role="main">
                 @RenderBody()
             </main>
         </div>
+
 
 
    <!-- Floating Chatbot Button -->
@@ -191,6 +184,15 @@
     });
 </script>
 
+
+
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+
+        <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+        <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+        @await RenderSectionAsync("Scripts", required: false)
 
 </body>
 

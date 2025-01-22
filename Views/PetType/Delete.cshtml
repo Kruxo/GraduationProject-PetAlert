@@ -1,8 +1,16 @@
 @model PetTypeDeleteVm
 
+@{
+    ViewData["Title"] = "Delete pet category";
+}
+
 <style>
+    body {
+        background-color: #fff9f4;
+    }
+
     .delete-container {
-        max-width: 500px;
+        max-width: 600px;
         margin: 40px auto;
         background-color: #ffffff;
         border-radius: 16px;
@@ -12,11 +20,11 @@
         text-align: center;
     }
 
-    .delete-title {
+    h1 {
         font-size: 28px;
-        color: hsl(0, 70%, 50%);
         font-weight: bold;
-        margin-bottom: 15px;
+        text-align: center;
+        margin-bottom: 20px;
     }
 
     .delete-image {
@@ -24,6 +32,7 @@
         object-fit: cover;
         margin: 20px 0;
         border-radius: 12px;
+        background-color: #f0e4d7;
     }
 
     .delete-warning {
@@ -35,38 +44,53 @@
     .btn-group {
         margin-top: 20px;
         display: flex;
-        gap: 10px;
+        gap: 15px;
         justify-content: center;
     }
 
-    .btn {
-        padding: 10px 20px;
-        border-radius: 12px;
+    .btn-secondary {
+        display: block;
+        width: 100%;
+        color: #ffffff;
+        border: none;
+        padding: 14px 20px;
+        font-size: 16px;
         font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
-    .btn-secondary {
-        background-color: #6c757d;
-        color: white;
+    .btn-secondary:hover {
+        transform: translateY(-2px);
     }
 
     .btn-danger {
-        background-color: hsl(0, 70%, 50%);
-        color: white;
+        display: block;
+        width: 100%;
+        color: #ffffff;
+        border: none;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-danger:hover {
+        transform: translateY(-2px);
     }
 </style>
 
-<div class="delete-container">
-    <h1 class="delete-title">Delete Pet Type</h1>
-    <img src="@Model.Image" alt="@Model.Type" class="delete-image" />
-    <p>Are you sure you want to delete this pet type <strong>"@Model.Type"</strong>?</p>
-    <p class="delete-warning">This will also delete ALL pets associated with that pet type!</p>
+<body>
+    <div class="delete-container">
+        <h1>Delete Pet Type</h1>
+        <img src="@Model.Image" alt="@Model.Type" class="delete-image" />
+        <p>Are you sure you want to delete this pet type <strong>"@Model.Type"</strong>?</p>
+        <p class="delete-warning">This will also delete ALL pets associated with that pet type!</p>
 
-    <form asp-action="Delete" method="post">
-        <input type="hidden" asp-for="Id" />
-        <div class="btn-group">
-            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-            <button type="submit" class="btn btn-danger">Delete</button>
-        </div>
-    </form>
-</div>
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="Id" />
+            <div class="btn-group">
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+        </form>
+    </div>
+</body>

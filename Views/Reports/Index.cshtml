@@ -1,77 +1,201 @@
 @model FoundLostIndexVm
+
+@{
+    ViewData["Title"] = "List of Missing Pets";
+}
+
 @{
     //Combines lost and found reports into a single list and sort by date
     var allPets = Model.LostPets
-    .Select(p => new { p.Id, p.Name, p.Description, p.Image, p.Date, ReportType = "Lost" }) @*Select linq method transforms each item in LostPets list into an object, and also include a new item called ReportType *@
-.Concat(Model.FoundPets.Select(p => new { p.Id, p.Name, p.Description, p.Image, p.Date, ReportType = "Found" })) @*Does the same as above but combines with concat into a single sequence*@
+    .Select(p => new
+    {
+        p.Id,
+        p.Name,
+        p.Description,
+        p.Image,
+        p.Date,
+        ChipId = p.ChipId,
+        ReportType = "Lost",
+        PetType = Model.PetTypes.FirstOrDefault(pt => pt.Id == p.PetTypeId)?.Type ?? "Unknown",
+        PhoneNumber = Model.Users.FirstOrDefault(pn => pn.Id == p.UserId)?.PhoneNumber ?? "Not available"
+
+    }) @*Select linq method transforms each item in LostPets list into an object, and also include a new item called ReportType *@
+.Concat(Model.FoundPets.Select(p => new
+{
+    p.Id,
+    p.Name,
+    p.Description,
+    p.Image,
+    p.Date,
+    ChipId = "Not available",
+    ReportType = "Found",
+    PetType = Model.PetTypes.FirstOrDefault(pt => pt.Id == p.PetTypeId)?.Type ?? "Unknown",
+    PhoneNumber = Model.Users.FirstOrDefault(pn => pn.Id == p.UserId)?.PhoneNumber ?? "Not available"
+})) @*Does the same as above but combines with concat into a single sequence*@
 .OrderByDescending(p => p.Date) @*Sorts by date*@
 .ToList(); @*Converts the sequence to a list*@
 }
 
-<div class="container-fluid reportlist p-4" style="display: flex; justify-content: center;">
-    <div style="display: flex; justify-content: center; width:90%; max-width: 1200px;">
-        <div class="col-12">
-            <ul class="list-unstyled">
-                <p style="font-size: xx-large;">Reported Pets</p>
-                @foreach (var pet in allPets)
-                {
-                    <div class="card mb-1">
-                        <li class="row align-items-start">
-                            <div class="col-auto">
-                                <img src="@pet.Image" class="image-fit rounded-left" alt="@pet.Image">
+<style>
+    .image-fit {
+        height: 150px;
+        width: 150px;
+        object-fit: cover;
+        border-radius: 3% 0 0 3%;
+    }
+
+    .report-container {
+        background-color: #fff9f4;
+        max-width: 750px;
+        margin: 20px auto;
+        padding: 20px;
+    }
+
+    .report-container h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 30px;
+        text-transform: uppercase;
+    }
+
+    .card {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow: hidden;
+        background: #ffffff;
+        border: 1px solid #e6ccb4;
+        border-radius: 16px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        background-color: #fff;
+    }
+
+    .card img {
+        height: 150px;
+        width: 150px;
+        object-fit: cover;
+        border-radius: 3% 0 0 3%;
+    }
+
+    .card-body {
+        flex-grow: 1;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .card-title {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .card .badge {
+        margin: 0;
+    }
+
+    .card-description {
+        padding-top: 10px;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .card-text {
+        color: hsl(30, 10%, 40%);
+        font-size: 0.9rem;
+    }
+
+    .card-margin {
+        margin-bottom: 5px;
+    }
+
+    /* Responsive Styling */
+    @@media (max-width: 768px) {
+        .card {
+            flex-direction: column;
+        }
+
+        .card img {
+            width: 100%;
+            /* Full width of the card */
+            height: 200px;
+            /* Maintain height of 200px */
+            object-fit: cover;
+            /* Ensure image covers space without distortion */
+            border-radius: 8px 8px 0 0;
+            /* Rounded corners on the top */
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+
+        .small-container {
+            padding-left: 30px;
+            padding-bottom: 10px;
+        }
+
+        .card-margin {
+            margin-bottom: 10px;
+        }
+    }
+</style>
+
+
+<div class="report-container" style="display: flex; justify-content: center;">
+    <div class="col-12">
+        <h1 style="text-align: center;">Missing Pets</h1>
+        <ul class="list-unstyled">
+            @foreach (var pet in allPets)
+            {
+                <div class="card card-margin">
+                    <li class="row align-items-start position-relative">
+                        <!-- Pet Image -->
+                        <img src="@pet.Image" alt="@pet.Name">
+
+                        <!-- Card Content -->
+                        <div class="small-container col">
+                            <div class="card-title mt-2">
+                                <strong>@pet.Name</strong>
+                                <span class="card-text">
+                                    <span class="badge bg-info text-dark" style="color: white !important;">
+                                        @pet.PetType
+                                    </span>
+                                    @if (pet.ReportType == "Found")
+                                    {
+                                        <span class="badge bg-warning text-dark">@pet.ReportType</span>
+                                    }
+                                    @if (pet.ReportType == "Lost")
+                                    {
+                                        <span class="badge bg-success text-dark" style="color: white !important;">
+                                            @pet.ReportType
+                                        </span>
+                                    }
+                                </span>
                             </div>
-                            <div class="col">
-                                <h5 class="card-title mt-3"><strong>@pet.Name</strong></h5>
-                                <p class="card-text">@pet.Description</p>
-                                <p class="card-text"><em>Report Category: @pet.ReportType</em></p>
-                                <!-- Indicate Lost or Found -->
-                                <p class="card-text"><small class="text-muted">Reported on:
-                                        @pet.Date.ToString("dd-MM-yyyy")</small></p>
-                                <!-- "dd-MMMM-yyyy" om man vill månaden skriven ut i bokstäver -->
+
+                            <div class="card-text" style="margin-top: 10px;">
+                                <strong>Chip ID:</strong> @pet.ChipId
                             </div>
-                        </li>
-                    </div>
-                }
-            </ul>
-        </div>
+                            <div class="card-text">
+                                <strong>Address:</strong> Testing Street
+                            </div>
+                            <div class="card-text">
+                                <strong>Phone Number:</strong> @pet.PhoneNumber
+                            </div>
+                            <div class="card-text">
+                                <strong>Reported Date:</strong> @pet.Date.ToString("dd-MM-yyyy")
+                            </div>
+                        </div>
+                        <div class="description col me-2">
+                            <div class="card-title mt-2"><strong>Description</strong></div>
+                            <span class="card-text" style="margin-top: 10px;">@pet.Description</span>
+                        </div>
+                    </li>
+                </div>
+            }
+
+        </ul>
     </div>
 </div>
-
-
-@* 
-
-@{
-    // Till Kit yee och Niklas, om ni inte vill använda linq
-
-    var allPets = new List<dynamic>(); //Tom lista av typen dynamic, som kan ta emot objekt
-
-    foreach (var lostPet in Model.LostPets) // Itererar genom LostPets och lägger till i den gemensamma listan
-    {
-        allPets.Add(new 
-        { 
-            Id = lostPet.Id, 
-            Name = lostPet.Name, 
-            Description = lostPet.Description, 
-            Image = lostPet.Image, 
-            Date = lostPet.Date, 
-            ReportType = "Lost" 
-        });
-    }
-
-    foreach (var foundPet in Model.FoundPets) // Itererar genom FoundPets och lägger till i den gemensamma listan
-    {
-        allPets.Add(new 
-        { 
-            Id = foundPet.Id, 
-            Name = foundPet.Name, 
-            Description = foundPet.Description, 
-            Image = foundPet.Image, 
-            Date = foundPet.Date, 
-            ReportType = "Found" 
-        });
-    }
-
-    allPets = allPets.OrderByDescending(p => p.Date).ToList(); 
-} 
-
-*@

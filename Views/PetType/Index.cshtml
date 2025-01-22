@@ -1,21 +1,27 @@
 @model PetTypeIndexVm
 
+@{
+    ViewData["Title"] = "All pet categories";
+}
+
 <style>
     body {
         background-color: #fff9f4;
     }
 
     h1 {
-        color: hsl(30, 10%, 20%);
-        font-size: 2rem;
+        font-size: 2.5rem;
         font-weight: bold;
+        color: hsl(30, 60%, 30%);
+        margin-bottom: 30px;
         text-align: center;
-        margin-bottom: 20px;
+        text-transform: uppercase;
     }
 
     .container {
         max-width: 1200px;
-        margin: 0 auto;
+        margin: 20px auto;
+        padding: 20px;
     }
 
     .card {
@@ -23,9 +29,10 @@
         background-color: #ffffff;
         border: none;
         border-radius: 16px;
+        border: 1px solid #e6ccb4;
         box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
         overflow: hidden;
-        margin: 5px;
+        margin: 10px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -34,6 +41,7 @@
     .card img {
         border-radius: 16px 16px 0 0;
         max-height: 200px;
+        min-height: 200px;
         object-fit: cover;
     }
 
@@ -52,21 +60,18 @@
         margin-bottom: 10px;
     }
 
-    .btn-warning {
-        background-color: hsl(45, 90%, 50%);
+    .btn-secondary {
         border: none;
         color: white;
         font-weight: bold;
         transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
-    .btn-warning:hover {
-        background-color: hsl(45, 90%, 45%);
+    .btn-secondary:hover {
         transform: translateY(-2px);
     }
 
     .btn-danger {
-        background-color: hsl(0, 70%, 50%);
         border: none;
         color: white;
         font-weight: bold;
@@ -74,7 +79,17 @@
     }
 
     .btn-danger:hover {
-        background-color: hsl(0, 70%, 45%);
+        transform: translateY(-2px);
+    }
+
+    .btn-success {
+        border: none;
+        color: white;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn-success:hover {
         transform: translateY(-2px);
     }
 
@@ -89,22 +104,24 @@
     }
 </style>
 
-<div class="container text-center my-4">
+<div class="container text-center">
+    <h1>Pet Type Categories</h1>
     <div class="my-4">
         <a asp-action="Create" class="btn btn-success">
             + Add Category
         </a>
     </div>
 
-    <div class="d-flex flex-wrap justify-content-center gap-4">
+    <div class="d-flex flex-wrap justify-content-center">
         @foreach (var petType in Model.PetTypes)
         {
-            <div class="card text-center" style="width: 18rem;">
+            <div class="card text-center">
                 <img src="@petType.Image" alt="@petType.Type" class="card-img-top" />
                 <div class="card-body">
                     <h5 class="card-title">@petType.Type</h5>
+                    <hr>
                     <div class="d-flex gap-2">
-                        <a asp-action="Edit" asp-route-id="@petType.Id" class="btn btn-warning flex-fill">Edit</a>
+                        <a asp-action="Edit" asp-route-id="@petType.Id" class="btn btn-secondary flex-fill">Edit</a>
                         <a asp-action="Delete" asp-route-id="@petType.Id" class="btn btn-danger flex-fill">Delete</a>
                     </div>
                 </div>

@@ -7,76 +7,86 @@
     var isAdmin = await UserService.IsCurrentUserAdministratorAsync();
 }
 
+@{
+    ViewData["Title"] = "Delete report";
+}
+
 <style>
     body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background-color: #fff9f4;
     }
 
-    .container {
-        max-width: 900px;
-        margin: 20px auto;
-        padding: 20px;
+    .form-container {
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 16px;
+        border: 1px solid #e6ccb4;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    @@media (max-width: 768px) {
+        .form-container {
+            max-width: 300px;
+            padding: 20px;
+        }
     }
 
     h1 {
-        color: hsl(0, 70%, 50%);
-        font-size: 1.8rem;
+        font-size: 28px;
         font-weight: bold;
-        margin-bottom: 30px;
+        text-align: center;
+        margin-bottom: 20px;
     }
 
     .card {
-        background-color: #ffffff;
         border: none;
-        border-radius: 16px;
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
     }
 
     .card-body {
         padding: 20px;
     }
 
-    img {
+    .img-delete {
         border-radius: 12px;
         background-color: #f0e4d7;
-        max-height: 200px;
+        height: 200px;
         object-fit: cover;
+        width: 200px;
     }
 
     hr {
         border: none;
         border-top: 1px solid hsl(30, 10%, 80%);
-        margin: 10px 0;
+        margin: 15px 0;
     }
 
     .btn-secondary {
-        background-color: hsl(30, 10%, 45%);
+        display: block;
+        width: 100%;
         color: #ffffff;
         border: none;
-        padding: 10px;
-        border-radius: 8px;
+        font-size: 16px;
         font-weight: bold;
         transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     .btn-secondary:hover {
-        background-color: hsl(30, 10%, 40%);
         transform: translateY(-2px);
     }
 
     .btn-danger {
-        background-color: hsl(0, 70%, 50%);
+        display: block;
+        width: 100%;
         color: white;
         border: none;
-        padding: 10px;
-        border-radius: 8px;
+        font-size: 16px;
         font-weight: bold;
         transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
     .btn-danger:hover {
-        background-color: hsl(0, 70%, 45%);
         transform: translateY(-2px);
     }
 </style>
@@ -86,13 +96,13 @@
     var currentUserId = UserManager.GetUserId(User); //Getting current userId
     if (Model.LostPet.UserId == currentUserId || isAdmin) //Checking if current userId matches with the owner
     {
-        <div class="container text-center">
-            <h1>Are you sure you want to delete this found pet entry?</h1>
-            <div class="card shadow-sm mx-auto">
+        <div class="form-container text-center">
+            <h1>Are you sure you want to delete this pet entry?</h1>
+            <div class="card mx-auto">
                 <div class="row g-0">
                     <!-- Found Pet Image Section -->
                     <div class="col-md-4 d-flex align-items-center justify-content-center p-3">
-                        <img src="@Model.LostPet.Image" alt="@Model.LostPet.Name" class="img-fluid">
+                        <img src="@Model.LostPet.Image" alt="@Model.LostPet.Name" class="img-delete">
                     </div>
 
                     <!-- Found Pet Details Section -->
@@ -100,9 +110,13 @@
                         <div class="card-body">
                             <h3 style="color: hsl(30, 10%, 20%);">@Model.LostPet.Name</h3>
                             <hr>
-                            <div class="d-flex justify-content-between">
+                            <div class="d-flex justify-content-between mt-4">
                                 <dt><strong>Description:</strong></dt>
                                 <dd>@Model.LostPet.Description</dd>
+                            </div>
+                            <div class="d-flex justify-content-between ">
+                                <dt><strong>Reported Date:</strong></dt>
+                                <dd>@Model.LostPet.Date</dd>
                             </div>
                             <form asp-action="Delete" class="mt-4">
                                 <input type="hidden" asp-for="LostPet.Id" />

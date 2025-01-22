@@ -1,0 +1,114 @@
+@model FoundLostIndexVm
+
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+@inject UserService UserService
+@{
+    var isAdmin = await UserService.IsCurrentUserAdministratorAsync();
+}
+
+@{
+    ViewData["Title"] = "Create Report";
+}
+
+<style>
+    body {
+        background-color: #fff9f4;
+        color: #4a3a28;
+    }
+
+    .report-container {
+        max-width: 900px;
+        margin: 20px auto;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .report-container h1 {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 30px;
+        text-transform: uppercase;
+    }
+
+    .card-container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .card {
+        background: #ffffff;
+        border: 1px solid #e6ccb4;
+        border-radius: 16px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        width: 320px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .card h2 {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: hsl(30, 60%, 35%);
+    }
+
+    .card p {
+        font-size: 1rem;
+        color: hsl(30, 10%, 40%);
+        margin: 0;
+    }
+
+    .card .btn {
+        display: inline-block;
+        color: white;
+        text-decoration: none;
+        padding: 12px 20px;
+        font-weight: bold;
+        font-size: 1rem;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        position: relative;
+        border: none;
+    }
+
+    .card.btn:hover {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
+
+<body>
+    <div class="report-container">
+        <h1>Report a missing pet</h1>
+        <div class="card-container">
+            <!-- Lost Pet Card -->
+            <div class="card">
+
+                <img width="50" height="50" src="https://img.icons8.com/ios/50/task.png" alt="task" />
+
+                <h2>Lost Pet Form</h2>
+                <p>Report your missing pet and let our community help find them.</p>
+                <a class="btn btn-primary" asp-area="" asp-controller="Lost" asp-action="Create">Report Lost Pet</a>
+            </div>
+
+            <!-- Found Pet Card -->
+            <div class="card">
+                <img width="50" height="50" src="https://img.icons8.com/ios/50/task.png" alt="task" />
+                <h2>Found Pet Form</h2>
+                <p>Help reunite a found pet with their owner.</p>
+                <a class="btn btn-primary" asp-area="" asp-controller="Found" asp-action="Create">Report Found Pet</a>
+            </div>
+        </div>
+    </div>
+</body>

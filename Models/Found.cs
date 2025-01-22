@@ -8,7 +8,6 @@ public class Found
 {
     public int Id { get; set; }
 
-    [Required(ErrorMessage = "Name cannot be empty")]
     [StringLength(50, MinimumLength = 2, ErrorMessage = "Name needs to have 2-50 characters")]
     public string Name { get; set; } = "";
 

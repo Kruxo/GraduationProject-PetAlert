@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using GraduationProject.Models;
 using Microsoft.EntityFrameworkCore;
 using GraduationProject.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GraduationProject.Controllers;
 
@@ -14,43 +15,46 @@ public class ReportsController : Controller
         _context = context;
     }
 
-
     public async Task<IActionResult> Index()
     {
 
-        var list = new FoundLostIndexVm
+        var viewModel = new FoundLostIndexVm
         {
             LostPets = await _context.LostPets.ToListAsync(),
             FoundPets = await _context.FoundPets.ToListAsync(),
-            // PetTypes = await _context.PetTypes.ToListAsync(),
-
+            PetTypes = await _context.PetTypes.ToListAsync(),
+            Users = await _context.Users.ToListAsync(),
         };
 
-        var LostPets = await _context.LostPets
-      .Select(lp => new
-      {
-          Name = lp.Name,
-          Description = lp.Description,
-          Image = lp.Image,
-          Id = lp.Id
-      })
-      .ToListAsync();
+        return View(viewModel);
+    }
 
-        var FoundPets = await _context.FoundPets
-      .Select(fp => new
-      {
-          Name = fp.Name,
-          Description = fp.Description,
-          Image = fp.Image,
-          Id = fp.Id
-      })
-      .ToListAsync();
+    [Authorize]
+    public async Task<IActionResult> YourReports()
+    {
 
+        var viewModel = new FoundLostIndexVm
+        {
+            LostPets = await _context.LostPets.ToListAsync(),
+            FoundPets = await _context.FoundPets.ToListAsync(),
+            PetTypes = await _context.PetTypes.ToListAsync(),
+            Users = await _context.Users.ToListAsync(),
+        };
 
+        return View(viewModel);
+    }
+    [Authorize]
+    public async Task<IActionResult> CreateReports()
+    {
 
-        var AllPets = LostPets.Concat(FoundPets).OrderByDescending(p => p.Id).ToList();
+        var viewModel = new FoundLostIndexVm
+        {
+            LostPets = await _context.LostPets.ToListAsync(),
+            FoundPets = await _context.FoundPets.ToListAsync(),
+            PetTypes = await _context.PetTypes.ToListAsync(),
+            Users = await _context.Users.ToListAsync(),
+        };
 
-
-        return View(list);
+        return View(viewModel);
     }
 }
