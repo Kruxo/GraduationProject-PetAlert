@@ -23,14 +23,19 @@ namespace PetAlert.Services
         private readonly ILogger<ChatbotService> _logger;
 
         // Constructor injection for ILogger
-        public ChatbotService(HttpClient httpClient, IConfiguration configuration, ApplicationDbContext context, ILogger<ChatbotService> logger)
+        public ChatbotService(
+        HttpClient httpClient,
+        IConfiguration configuration,
+        ApplicationDbContext context,
+        ILogger<ChatbotService> logger,
+        LocationService locationService) // Inject LocationService properly
         {
-            _httpClient = httpClient;
+            _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             _apiKey = configuration["GoogleAI:ApiKey"]
-                    ?? throw new InvalidOperationException("❌ Missing Google AI API Key. Ensure it is set in appsettings.json.");
-            _context = context;
-            _locationService = new LocationService(httpClient, configuration); // Initialize Location Service
-            _logger = logger; // Initialize the logger
+                      ?? throw new InvalidOperationException("❌ Missing Google AI API Key. Ensure it is set in appsettings.json.");
+            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _locationService = locationService ?? throw new ArgumentNullException(nameof(locationService)); // ✅ Ensure LocationService is injected
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger)); // ✅ Ensure logger is not null
         }
 
         public async Task<string> GetChatbotResponseAsync(string userMessage)
@@ -50,6 +55,8 @@ namespace PetAlert.Services
             _logger.LogInformation($"🔍 Received User Message: {userMessage}");
 
             var queryParameters = await ExtractQueryParametersWithGeminiAi(userMessage);
+            _logger.LogInformation($"🌍 Extracted City from AI: '{queryParameters.City}'");
+
             if (queryParameters == null)
             {
                 _logger.LogWarning("Could not extract query parameters from the user message.");
@@ -62,6 +69,8 @@ namespace PetAlert.Services
             queryParameters.Date ??= "";
             queryParameters.Name ??= "";
             queryParameters.ChipId ??= "";
+
+
 
             _logger.LogInformation($"✅ Extracted Parameters: PetType={queryParameters.PetType}, City={queryParameters.City}, Date={queryParameters.Date}, Name={queryParameters.Name}, ChipId={queryParameters.ChipId}");
 
@@ -84,17 +93,19 @@ namespace PetAlert.Services
                         parts = new[]
                         {
                             new { text = $@"
-                                Extract structured data from this query. 
-                                - Convert pet type to singular (e.g., 'dogs' → 'dog'). 
-                                - If the user requests 'all pets', set 'PetType' to empty to match any pet. 
-                                - If a specific name or ChipId is mentioned, extract and include it as optional filters.
-                                Return JSON format: 
-                                {{""PetType"": """", ""City"": """", ""Date"": """", ""Name"": """", ""ChipId"": """"}}. 
-                                Query: '{userMessage}'" }
+                                Extract structured data from this query and return **ONLY** JSON. No text explanation.
+                                - Convert pet type to singular (e.g., 'dogs' → 'dog').
+                                - If the user requests 'all pets', set 'PetType' to empty.
+                                - If a specific name or ChipId is mentioned, extract it.
+                                Return JSON ONLY:
+                                {{""PetType"": """", ""City"": """", ""Date"": """", ""Name"": """", ""ChipId"": """"}}
+                                Query: '{userMessage}'
+                            " }
                         }
                     }
                 }
             };
+
 
             // Convert to JSON
             var jsonContent = new StringContent(JsonSerializer.Serialize(requestBody), Encoding.UTF8, "application/json");
@@ -149,95 +160,142 @@ namespace PetAlert.Services
         {
             try
             {
-                _logger.LogInformation($"🔎 Searching for lost {parameters.PetType ?? "pets"} in {parameters.City} (since {parameters.Date})...");
+                _logger.LogInformation($"🔎 Searching for lost {parameters.PetType ?? "pets"} in {parameters.City}...");
 
                 var query = _context.LostPets
-            .Include(l => l.PetType)
-            .Include(l => l.User) // Include the User entity
-            .AsQueryable();
+                    .Include(l => l.PetType)
+                    .Include(l => l.User)
+                    .AsQueryable();
 
-                if (!string.IsNullOrWhiteSpace(parameters.PetType) && parameters.PetType.ToLower() != "all")
+                bool searchAllPets = string.IsNullOrWhiteSpace(parameters.PetType) || parameters.PetType.ToLower() == "all";
+
+                if (!searchAllPets)
                 {
-                    string petTypeSingular = parameters.PetType.ToLower();
-                    query = query.Where(l => l.PetType != null && l.PetType.Type.ToLower().Contains(petTypeSingular));
+                    string safePetType = parameters.PetType.Trim().ToLower();
+                    query = query.Where(l => l.PetType != null && l.PetType.Type.ToLower().Contains(safePetType));
                 }
 
                 if (!string.IsNullOrWhiteSpace(parameters.Name))
                 {
-                    query = query.Where(l => l.Name.ToLower().Contains(parameters.Name.ToLower()));
+                    string safeName = parameters.Name.Trim().ToLower();
+                    query = query.Where(l => l.Name.ToLower().Contains(safeName));
                 }
 
                 if (!string.IsNullOrWhiteSpace(parameters.ChipId))
                 {
-                    query = query.Where(l => l.ChipId == parameters.ChipId);
+                    string safeChipId = parameters.ChipId.Trim();
+                    query = query.Where(l => l.ChipId == safeChipId);
                 }
 
                 var lostPets = await query.ToListAsync();
-
                 if (!lostPets.Any())
                 {
-                    _logger.LogInformation("No lost pets found.");
+                    _logger.LogInformation("🚫 No lost pets found.");
                     return "🚫 No lost pets found.";
                 }
 
-                // 🔥 Return a formatted HTML string for chatbot responses
-                var response = new StringBuilder();
-                string cityName = "";
+                Dictionary<(double, double), string> cityCache = new();
                 foreach (var pet in lostPets)
                 {
-                    // Convert latitude & longitude safely
                     if (double.TryParse(pet.Latitude, NumberStyles.Any, CultureInfo.InvariantCulture, out double latitude) &&
                         double.TryParse(pet.Longitude, NumberStyles.Any, CultureInfo.InvariantCulture, out double longitude))
                     {
-                        // Fetch city name using OpenStreetMap API
-                        cityName = await _locationService.GetCityFromCoordinates(latitude, longitude) ?? "Unknown Location";
+                        if (!cityCache.TryGetValue((latitude, longitude), out string cityName))
+                        {
+                            cityName = await _locationService.GetCityFromCoordinates(latitude, longitude) ?? "Unknown";
+                            cityCache[(latitude, longitude)] = cityName;
+                        }
                     }
-                    else
-                    {
-                        _logger.LogWarning("Invalid latitude/longitude format for pet: " + pet.Name);
-                        cityName = "Unknown Location";
-                    }
-
-                    response.Append($@"
-    <div class='card mb-2' style='border-radius: 10px; overflow: hidden;'>
-        <img src='{pet.Image}' alt='{pet.Name}' style='height: 160px; width: 100%; object-fit: cover;'>
-        <div class='p-2'>
-            <div class='d-flex align-items-center text-muted mb-2'>
-                <i class='fas fa-map-marker-alt me-1'></i> Last seen at {cityName}
-            </div>
-            <h5 class='fw-bold text-dark d-flex align-items-center'>
-                {pet.Name}
-                <span class='badge bg-warning text-dark ms-2'>
-                    {pet.PetType?.Type ?? "Unknown"}
-                </span>
-            </h5>
-
-            <div class='text-muted' style='margin-bottom: 5px'>
-                <b>Description:</b>
-                <div>{pet.Description}</div>
-            </div>
-            <div class='text-muted' style='margin-bottom: 5px'>
-                <div><b>Phone Number:</b>{pet.User?.PhoneNumber ?? "Not Available"}</div>
-            </div>
-            
-            {(pet.ChipId != null ? $@"
-            <div class='text-muted' style='margin-bottom: 5px'>
-                
-                <div><b>Chip ID:</b>{pet.ChipId}</div>
-            </div>" : "")}
-        </div>
-    </div>
-");
-
                 }
 
-                return response.ToString();
+                if (!string.IsNullOrWhiteSpace(parameters.City))
+                {
+                    _logger.LogInformation($"🌍 Expanding search around: {parameters.City}");
+
+                    string normalizedCityQuery = parameters.City.Trim().ToLower();
+                    List<Lost> filteredLostPets = new();
+
+                    foreach (var pet in lostPets)
+                    {
+                        if (double.TryParse(pet.Latitude, NumberStyles.Any, CultureInfo.InvariantCulture, out double lat) &&
+                            double.TryParse(pet.Longitude, NumberStyles.Any, CultureInfo.InvariantCulture, out double lon))
+                        {
+                            if (cityCache.TryGetValue((lat, lon), out string cityName))
+                            {
+                                if (cityName.ToLower().Contains(normalizedCityQuery) ||
+                                    await _locationService.IsNearbyCity(cityName, normalizedCityQuery)) // ✅ Uses new method
+                                {
+                                    filteredLostPets.Add(pet);
+                                }
+                            }
+                        }
+                    }
+
+                    lostPets = filteredLostPets;
+                }
+
+                _logger.LogInformation($"✅ Found {lostPets.Count} matching pets.");
+                return FormatLostPets(lostPets, cityCache);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Database Query Error: {ex.Message}");
+                _logger.LogError($"❌ Database Query Error: {ex.Message}");
                 return "❌ Database Query Error.";
             }
         }
+
+
+
+        private string FormatLostPets(List<Lost> lostPets, Dictionary<(double, double), string> cityCache)
+        {
+            var response = new StringBuilder();
+            foreach (var pet in lostPets)
+            {
+                string cityName = "Unknown Location";
+
+                if (double.TryParse(pet.Latitude, NumberStyles.Any, CultureInfo.InvariantCulture, out double latitude) &&
+                    double.TryParse(pet.Longitude, NumberStyles.Any, CultureInfo.InvariantCulture, out double longitude))
+                {
+                    cityName = cityCache.GetValueOrDefault((latitude, longitude), "Unknown Location");
+                }
+
+                response.Append($@"
+            <div class='card mb-2' style='border-radius: 10px; overflow: hidden;'>
+                <img src='{pet.Image}' alt='{pet.Name}' style='height: 160px; width: 100%; object-fit: cover;'>
+                <div class='p-2'>
+                    <div class='d-flex align-items-center text-muted mb-2'>
+                        <i class='fas fa-map-marker-alt me-1'></i> Last seen at {cityName}
+                    </div>
+                    <h5 class='fw-bold text-dark d-flex align-items-center'>
+                        {pet.Name}
+                        <span class='badge bg-warning text-dark ms-2'>
+                            {pet.PetType?.Type ?? "Unknown"}
+                        </span>
+                    </h5>
+                    <div class='text-muted' style='margin-bottom: 5px'>
+                        <b>Description:</b>
+                        <div>{pet.Description}</div>
+                    </div>
+                    <div class='text-muted' style='margin-bottom: 5px'>
+                        <div><b>Phone Number:</b> {pet.User?.PhoneNumber ?? "Not Available"}</div>
+                    </div>
+                    {(pet.ChipId != null ? $@"
+                    <div class='text-muted' style='margin-bottom: 5px'>
+                        <div><b>Chip ID:</b> {pet.ChipId}</div>
+                    </div>" : "")}
+                </div>
+            </div>
+        ");
+            }
+
+            return response.ToString();
+        }
+
+
+
+
+
+
+
     }
 }

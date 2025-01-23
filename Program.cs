@@ -9,8 +9,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddHttpClient<LocationService>();
+builder.Services.AddHttpClient<ChatbotService>();
+
+builder.Services.AddScoped<LocationService>(); // Ensure LocationService is properly registered
+builder.Services.AddScoped<ChatbotService>();  // Ensure ChatbotService is properly registered
+builder.Services.AddLogging(); // Logging should be added
+
+// Register ApplicationDbContext properly
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("AzureDb")));
+
 
 builder.Services.AddDefaultIdentity<IdentityUser>()
 .AddRoles<IdentityRole>()
@@ -20,10 +29,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>()
 builder.Services.AddTransient<DatabaseSetupService>();
 builder.Services.AddTransient<UserService>();
 
-// register HttpClient and ChatbotService to Register the Chatbot Service
-// ✅ Register ChatbotService correctly
-builder.Services.AddHttpClient<ChatbotService>(); 
-builder.Services.AddScoped<ChatbotService>();
+
 
 
 var app = builder.Build();
