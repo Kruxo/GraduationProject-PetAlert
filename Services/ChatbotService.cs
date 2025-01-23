@@ -200,7 +200,7 @@ namespace PetAlert.Services
 
                     response.Append($@"
     <div class='card mb-2' style='border-radius: 10px; overflow: hidden;'>
-        <img src='{pet.Image}' alt='{pet.Name}' style='height: 160px; width: 100%; object-fit: cover;'>
+        <img src='{pet.Image}' alt='{pet.Name}' style='height: 160px; width: 100%; object-fit: cover; border-radius: 3% 3% 0 0;'>
         <div class='p-2'>
             <div class='d-flex align-items-center text-muted mb-2'>
                 <i class='fas fa-map-marker-alt me-1'></i> Last seen at {cityName}
@@ -217,13 +217,13 @@ namespace PetAlert.Services
                 <div>{pet.Description}</div>
             </div>
             <div class='text-muted' style='margin-bottom: 5px'>
-                <div><b>Phone Number:</b>{pet.User?.PhoneNumber ?? "Not Available"}</div>
+                <div><b>Phone Number:</b> {pet.User?.PhoneNumber ?? "Not Available"}</div>
             </div>
             
             {(pet.ChipId != null ? $@"
             <div class='text-muted' style='margin-bottom: 5px'>
                 
-                <div><b>Chip ID:</b>{pet.ChipId}</div>
+                <div><b>Chip ID:</b> {pet.ChipId}</div>
             </div>" : "")}
         </div>
     </div>

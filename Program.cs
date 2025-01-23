@@ -22,9 +22,11 @@ builder.Services.AddTransient<UserService>();
 
 // register HttpClient and ChatbotService to Register the Chatbot Service
 // ✅ Register ChatbotService correctly
-builder.Services.AddHttpClient<ChatbotService>(); 
+builder.Services.AddHttpClient<ChatbotService>();
 builder.Services.AddScoped<ChatbotService>();
 
+builder.Services.AddHttpClient<LocationService>();
+builder.Services.AddScoped<LocationService>();
 
 var app = builder.Build();
 
