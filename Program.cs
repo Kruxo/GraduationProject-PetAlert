@@ -31,6 +31,8 @@ builder.Services.AddTransient<UserService>();
 
 
 
+builder.Services.AddHttpClient<LocationService>();
+builder.Services.AddScoped<LocationService>();
 
 var app = builder.Build();
 
