@@ -45,11 +45,12 @@
         margin-bottom: 20px;
     }
 
-    .form-label {
-        display: block;
-        margin-bottom: 8px;
+
+
+    .form-group label {
         font-weight: bold;
-        color: hsl(30, 10%, 35%);
+        color: hsl(30, 10%, 45%);
+        margin-bottom: 3px;
     }
 
     .form-control {
@@ -72,7 +73,7 @@
         color: hsl(30, 10%, 65%);
     }
 
-    .btn {
+    .btnn {
         display: block;
         width: 100%;
         color: white;
@@ -82,7 +83,7 @@
         transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
-    .btn:hover {
+    .btnn:hover {
         transform: translateY(-2px);
     }
 
@@ -168,7 +169,7 @@
             <span asp-validation-for="FoundPet.Image" class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn btn-primary" style="padding: 14px 20px">Submit Report</button>
+        <button type="submit" class="btnn btn-primary" style="padding: 14px 20px">Submit Report</button>
     </form>
 </div>
 

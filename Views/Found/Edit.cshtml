@@ -14,7 +14,6 @@
 
 <style>
     body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background-color: #fff9f4;
     }
 
@@ -37,36 +36,46 @@
         gap: 20px;
     }
 
+    @@media (max-width: 768px) {
+        .card {
+            max-width: 300px;
+        }
+    }
+
     .form-group label {
         font-weight: bold;
         color: hsl(30, 10%, 45%);
     }
 
     .form-control {
-        padding: 12px;
-        border: 1px solid #e6ccb4;
-        border-radius: 8px;
-        background-color: #fff9f4;
-        transition: box-shadow 0.3s ease, border-color 0.3s ease;
+        width: 100%;
+        padding: 12px 15px;
+        font-size: 16px;
+        border: 2px solid hsl(30, 20%, 85%);
+        border-radius: 12px;
+        background-color: #fffaf4;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
 
     .form-control:focus {
-        border-color: hsl(28, 54%, 44%);
-        box-shadow: 0 0 6px rgba(162, 107, 61, 0.5);
+        outline: none;
+        border-color: hsl(30, 30%, 65%);
+        box-shadow: 0 0 8px rgba(162, 107, 61, 0.4);
+    }
+
+    .form-control::placeholder {
+        color: hsl(30, 10%, 65%);
     }
 
     .btn-primary {
-        background-color: hsl(28, 54%, 44%);
         border: none;
         color: white;
         padding: 12px;
-        border-radius: 8px;
         transition: background-color 0.3s ease, transform 0.2s ease;
         font-weight: bold;
     }
 
     .btn-primary:hover {
-        background-color: hsl(28, 54%, 39%);
         transform: translateY(-2px);
     }
 
@@ -78,6 +87,7 @@
         background-color: #f0e4d7;
     }
 </style>
+
 
 @if (SignInManager.IsSignedIn(User))
 {
@@ -109,8 +119,8 @@
                         <span asp-validation-for="FoundPet.Description" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group position-relative">
-                        <label class="form-label">Search Location</label>
+                    <div class="form-group position-relative mb-3">
+                        <label>Search Location</label>
                         <input type="text" id="searchBox" class="form-control" placeholder="Type an address..."
                             autocomplete="off">
 
@@ -118,8 +128,8 @@
                         <div class="dropdown-menu w-100 shadow-sm mt-1" id="autocomplete-list"></div>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="form-label">Or select location on the map</label>
+                    <div class="form-group mb-3">
+                        <label>Or select location on the map</label>
                         <div id="map" style="height: 400px; width: 100%; border: 1px solid #ccc; border-radius: 10px;"></div>
                     </div>
 

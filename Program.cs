@@ -2,6 +2,7 @@ using GraduationProject.Models;
 using GraduationProject.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using PetAlert.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,14 @@ builder.Services.AddDefaultIdentity<IdentityUser>()
 
 builder.Services.AddTransient<DatabaseSetupService>();
 builder.Services.AddTransient<UserService>();
+
+// register HttpClient and ChatbotService to Register the Chatbot Service
+// ✅ Register ChatbotService correctly
+builder.Services.AddHttpClient<ChatbotService>();
+builder.Services.AddScoped<ChatbotService>();
+
+builder.Services.AddHttpClient<LocationService>();
+builder.Services.AddScoped<LocationService>();
 
 var app = builder.Build();
 

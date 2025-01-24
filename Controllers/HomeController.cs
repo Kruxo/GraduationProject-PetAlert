@@ -17,28 +17,21 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
-
-        var list = new FoundLostIndexVm
-        {
-            LostPets = await _context.LostPets.ToListAsync(),
-            FoundPets = await _context.FoundPets.ToListAsync(),
-        };
-
         var lostPetMarkers = await _context.LostPets
-     .Include(f => f.PetType) // Include related PetType
-     .Include(f => f.User)    // Include related User
-     .Select(f => new
-     {
-         f.Name,
-         f.Description,
-         f.Image,
-         f.Latitude,
-         f.Longitude,
-         PetType = f.PetType != null ? f.PetType.Type : "Unknown", // Include PetType if available
-         PhoneNumber = f.User != null ? f.User.PhoneNumber : "Not Provided", // Include User's PhoneNumber if available
-         ChipId = f.ChipId // Specific to Lost pets
-     })
-     .ToListAsync();
+            .Include(f => f.PetType)
+            .Include(f => f.User)
+            .Select(f => new
+            {
+                f.Name,
+                f.Description,
+                f.Image,
+                f.Latitude,
+                f.Longitude,
+                PetType = f.PetType != null ? f.PetType.Type : "Unknown",
+                PhoneNumber = f.User != null ? f.User.PhoneNumber : "Not Provided",
+                ChipId = f.ChipId
+            })
+            .ToListAsync();
 
         var foundPetMarkers = await _context.FoundPets
             .Include(f => f.PetType)
@@ -52,14 +45,15 @@ public class HomeController : Controller
                 f.Longitude,
                 PetType = f.PetType != null ? f.PetType.Type : "Unknown",
                 PhoneNumber = f.User != null ? f.User.PhoneNumber : "Not Provided",
-                ChipId = (string?)null // Found pets do not have a ChipId, so set it as null
+                ChipId = (string?)null
             })
             .ToListAsync();
 
         var combinedMarkers = lostPetMarkers.Concat(foundPetMarkers).ToList();
 
         ViewBag.Markers = combinedMarkers;
-        return View(list);
+        return View();
     }
+
 
 }

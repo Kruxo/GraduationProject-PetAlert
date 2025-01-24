@@ -95,90 +95,119 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const map = L.map('map').setView([59.3293, 18.0686], 10);
+    document.addEventListener('DOMContentLoaded', function () {
+        const map = L.map('map').setView([59.3293, 18.0686], 10);
 
-            // Add OpenStreetMap tiles
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors',
-            }).addTo(map);
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+        }).addTo(map);
 
-            // Define a custom icon
-            const customIcon = L.icon({
-                iconUrl: 'https://cdn2.iconfinder.com/data/icons/animals-92/28/animal_lineal_color-09-512.png', // Path to your custom icon
-                iconSize: [32, 32], // Size of the icon
-                iconAnchor: [16, 32], // Anchor point of the icon (center bottom)
-                popupAnchor: [0, -32] // Point where the popup opens relative to the icon
-            });
+        // Define a custom icon
+        const customIcon = L.icon({
+            iconUrl: 'https://cdn2.iconfinder.com/data/icons/animals-92/28/animal_lineal_color-09-512.png', // Path to your custom icon
+            iconSize: [32, 32], // Size of the icon
+            iconAnchor: [16, 32], // Anchor point of the icon (center bottom)
+            popupAnchor: [0, -32] // Point where the popup opens relative to the icon
+        });
 
-            // Markers from the server
-            const markers = @Html.Raw(Json.Serialize(ViewBag.Markers));
+        // Markers from the server
+        const markers = @Html.Raw(Json.Serialize(ViewBag.Markers));
+        const addressCache = new Map();
 
-            markers.forEach(marker => {
-                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${marker.latitude}&lon=${marker.longitude}`)
-                    .then(response => response.json())
+        const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+        // Fetch address with caching
+        const fetchAddressWithCache = async (lat, lon) => {
+            const key = `${lat},${lon}`;
+            if (addressCache.has(key)) {
+                return addressCache.get(key); // Return cached address
+            }
+
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                const data = await response.json();
+                addressCache.set(key, data); // Cache the result
+                return data;
+            } catch (error) {
+                console.error("Error fetching address:", error);
+                return null; // Return null on error
+            }
+        };
+
+        const processMarkers = async () => {
+            let delayTime = 0;
+
+            for (const marker of markers) {
+                // Delay to throttle API calls
+                await delay(delayTime);
+
+                fetchAddressWithCache(marker.latitude, marker.longitude)
                     .then(data => {
-                        let address = data.address || {}; // Get structured address data
-
-                        // Extract only required fields in the specified order
+                        let address = data?.address || {};
                         let road = address.road || "";
                         let houseNumber = address.house_number || "";
                         let postcode = address.postcode || "";
                         let city = address.city || address.town || address.village || "";
-
-                        // Format the address in the required order
                         let formattedAddress = `${road} ${houseNumber}, ${postcode}, ${city}`;
-
-                        // If road is missing, remove extra spaces and commas
                         formattedAddress = formattedAddress.replace(/,\s*,/g, ",").trim();
-                        formattedAddress = formattedAddress.replace(/^,|,$/g, ""); // Remove leading/trailing commas
+                        formattedAddress = formattedAddress.replace(/^,|,$/g, "");
 
-                        console.log(formattedAddress); // Debugging
-
-                        // Display formatted address in popup
+                        // Add marker with popup
                         L.marker([marker.latitude, marker.longitude], { icon: customIcon })
                             .addTo(map)
                             .bindPopup(`
-
-                    <img src="${marker.image}" alt="${marker.name}"
-    style="height: 160px; width: 100%; object-fit: cover;">
-<div class="p-2">
-    <!-- Display the formatted address -->
-    <div class="d-flex align-items-center text-muted small mb-2">
-        <i class="fas fa-map-marker-alt me-1"></i> ${formattedAddress}
-    </div>
-    <!-- Name and Pet Type -->
-    <h5 class="fw-bold text-dark d-flex align-items-center">
-        ${marker.name}
-        <span class="badge bg-warning text-dark ms-2">
-            <i class="fas"></i>${marker.petType}
-        </span>
-    </h5>
-    <!-- Description -->
-    <div class="text-muted" style="margin-bottom: 5px">
-        <b>Description:</b>
-        <div>${marker.description}</div>
-    </div>
-    <!-- Phone Number -->
-    <div class="text-muted" style="margin-bottom: 5px">
-        <b>Phone Number:</b>
-        <div>${marker.phoneNumber}</div>
-    </div>
-    <!-- Chip ID -->
-    ${marker.chipId ? `
-    <div class="text-muted" style="margin-bottom: 5px">
-        <b>Chip ID:</b>
-        <div>${marker.chipId}</div>
-    </div>` : ""}
-</div>
-
-
-            `, { minWidth: 200, maxWidth: 250 });
+                                <img src="${marker.image}" alt="${marker.name}" 
+                                style="height: 160px; width: 100%; object-fit: cover;">
+                                <div class="p-2">
+                                    <div class="d-flex align-items-center text-muted small mb-2">
+                                        <i class="fas fa-map-marker-alt me-1"></i> ${formattedAddress || "Address not available"}
+                                    </div>
+                                    <h5 class="fw-bold text-dark d-flex align-items-center">
+                                        ${marker.name}
+                                        <span class="badge bg-warning text-dark ms-2">
+                                            ${marker.petType}
+                                        </span>
+                                    </h5>
+                                    <div class="text-muted"><b>Description:</b> ${marker.description}</div>
+                                    <div class="text-muted"><b>Phone Number:</b> ${marker.phoneNumber}</div>
+                                    ${marker.chipId ? `<div class="text-muted"><b>Chip ID:</b> ${marker.chipId}</div>` : ""}
+                                </div>
+                            `, { minWidth: 200, maxWidth: 250 });
                     })
-                    .catch(error => console.error("Error fetching address:", error));
+                    .catch(error => {
+                        console.error("Error processing marker:", error);
 
-            });
-        });
-    </script>
+                        // Add marker with default address on failure
+                        L.marker([marker.latitude, marker.longitude], { icon: customIcon })
+                            .addTo(map)
+                            .bindPopup(`
+                                <img src="${marker.image}" alt="${marker.name}" 
+                                style="height: 160px; width: 100%; object-fit: cover;">
+                                <div class="p-2">
+                                    <div class="d-flex align-items-center text-muted small mb-2">
+                                        <i class="fas fa-map-marker-alt me-1"></i> Address not available
+                                    </div>
+                                    <h5 class="fw-bold text-dark d-flex align-items-center">
+                                        ${marker.name}
+                                        <span class="badge bg-warning text-dark ms-2">
+                                            ${marker.petType}
+                                        </span>
+                                    </h5>
+                                    <div class="text-muted"><b>Description:</b> ${marker.description}</div>
+                                    <div class="text-muted"><b>Phone Number:</b> ${marker.phoneNumber}</div>
+                                    ${marker.chipId ? `<div class="text-muted"><b>Chip ID:</b> ${marker.chipId}</div>` : ""}
+                                </div>
+                            `, { minWidth: 200, maxWidth: 250 });
+                    });
+
+                delayTime += 200; // Increment delay to throttle requests (200ms per marker)
+            }
+        };
+
+        processMarkers();
+    });
+</script>
+
     </div>
 </body>
